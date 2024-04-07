@@ -1,10 +1,11 @@
 package com.project.app
 
-import com.project.app.controller.BaseController
+import com.project.app.ui.controller.AccountController
+import com.project.app.ui.controller.BaseController
 import javafx.application.Application
 
 class Desktop
 
 fun main() {
-    Application.launch(BaseController::class.java)
+    Application.launch(AccountController::class.java)
 }

@@ -1,4 +1,166 @@
 .root {
-    -fx-background-color: #806cf5;
+    -fx-background-color: #1a1c21;
     -fx-background-radius: 24px;
+}
+
+.label {
+    -fx-font-family: "Franklin Gothic Medium";
+}
+
+.button {
+    -fx-font-family: "Franklin Gothic Medium";
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: HAND;
+    -fx-background-color: #806cf5;
+    -fx-pref-width: 220.0;
+    -fx-pref-height: 35.0;
+}
+
+.text-field {
+    -fx-focus-traversable: false;
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-font-family: "Franklin Gothic Medium";
+    -fx-font-size: 18px;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 243px;
+    -fx-pref-height: 36px;
+    -fx-alignment: CENTER;
+}
+
+#logo {
+    -fx-image: url("files/logo.png");
+}
+
+#title {
+    -fx-font-size: 17px;
+    -fx-text-fill: white;
+}
+
+#description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #909090;
+}
+
+#close {
+    -fx-image: url("files/close.png");
+}
+
+#collapse {
+    -fx-image: url("files/collapse.png");
+}
+
+#plus {
+    -fx-image: url("files/plus.png");
+}
+
+#add_account_text {
+    -fx-text-fill: #bababa;
+    -fx-font-size: 15px;
+}
+
+#add_account {
+    -fx-pref-width: 173px;
+    -fx-pref-height: 36px;
+    -fx-background-color: #015801;
+    -fx-background-radius: 16px;
+}
+
+#add_account:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #003500;
+}
+
+#background {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-radius: 24px;
+}
+
+#block-ma-file {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 380px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#lock {
+    -fx-image: url("files/lock.png");
+}
+
+#title-ma-file {
+    -fx-font-size: 17px;
+    -fx-text-fill: #bfbfbf;
+}
+
+#description-ma-file {
+    -fx-font-size: 15px;
+    -fx-text-fill: #807f7f;
+}
+
+#hint-ma-file {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: true;
+    -fx-pref-width: 250px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #807f7f;
+}
+
+#ma-file {
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 205px;
+}
+
+#ma-file-drag {
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #ffffff;
+    -fx-background-color: #1d2127;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 205px;
+}
+
+#ma-file-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807f7f;
+}
+
+#drag {
+    -fx-image: url("files/drag.png");
+}
+
+#task {
+    -fx-background-radius: 24px;
+    -fx-background-color: #2a2d33;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 30px;
+}
+
+#task-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9a9797;
+    -fx-pref-width: 343px;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+#orange {
+    -fx-image: url("files/orange.png");
+}
+
+#username-ma-file {
+    -fx-font-size: 21px;
+    -fx-text-fill: #bfbfbf;
+    -fx-pref-width: 300px;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+#hint-ma-file-2 {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807f7f;
 }
