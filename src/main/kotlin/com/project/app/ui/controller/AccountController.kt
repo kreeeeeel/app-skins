@@ -1,5 +1,6 @@
 package com.project.app.ui.controller
 
+import com.project.app.ui.component.AccountComponent
 import com.project.app.ui.component.FileComponent
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
@@ -38,6 +39,10 @@ class AccountController: BaseController() {
             fileComponent.init(root)
             fileComponent.animate()
         }
+
+        val accountComponent = AccountComponent()
+        accountComponent.init(root)
+
         super.start(primaryStage)
     }
 

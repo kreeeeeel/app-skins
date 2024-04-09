@@ -1,19 +1,23 @@
 package com.project.app.ui.controller
 
 import com.project.app.Desktop
+import com.project.app.ui.component.TrayComponent
 import javafx.application.Application
 import javafx.scene.Cursor
 import javafx.scene.Scene
 import javafx.scene.control.Label
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import kotlin.system.exitProcess
+
 
 const val WIDTH = 1200.0
 const val HEIGHT = 700.0
+
+const val ICON_TRAY = "files/logo.png"
 
 open class BaseController: Application() {
 
@@ -75,9 +79,11 @@ open class BaseController: Application() {
     private var offsetX: Double = 0.0
     private var offsetY: Double = 0.0
 
+    private var stage: Stage? = null
+
     override fun start(primaryStage: Stage?) {
 
-        close.setOnMouseClicked { exitProcess(0) }
+        close.setOnMouseClicked { TrayComponent().init(root) }
         collapse.setOnMouseClicked { primaryStage?.isIconified = true }
 
         root.children.addAll(task, close, collapse)
@@ -95,12 +101,17 @@ open class BaseController: Application() {
             }
             it.scene.setOnMouseReleased { _ -> it.scene.cursor = Cursor.DEFAULT }
 
-            it.initStyle(StageStyle.TRANSPARENT)
-            it.show()
+            stage = it
+
+            try {
+                it.title = "Менеджер предметов"
+                it.initStyle(StageStyle.TRANSPARENT)
+                it.icons.add(Image(Desktop::class.java.getResourceAsStream(ICON_TRAY)))
+            } finally {
+                it.show()
+            }
         }
-
     }
-
 
     companion object {
 

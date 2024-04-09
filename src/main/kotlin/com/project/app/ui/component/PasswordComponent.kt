@@ -1,5 +1,6 @@
 package com.project.app.ui.component
 
+import com.project.app.handler.DriverHandler
 import com.project.app.handler.SteamAuthHandler
 import com.project.app.property.SteamProperty
 import javafx.application.Platform
@@ -12,7 +13,7 @@ import javafx.scene.layout.Pane
 private const val HINT_TEXT = "Пароль как и все остальные данные будет храниться только на ВАШЕМ компьютере, в зашифрованном виде. После того как вы укажите пароль, приложение проверит что аккаунт является валидным"
 
 class PasswordComponent(
-    val steamProperty: SteamProperty
+    private val steamProperty: SteamProperty
 ): BaseComponent() {
 
     private val block = Pane().also {
@@ -78,7 +79,7 @@ class PasswordComponent(
         block.children.addAll(username, textField, button)
         pane.children.add(block)
 
-        button.setOnMouseClicked { SteamAuthHandler().getProfileProperty(steamProperty, textField.text.trim()) }
+        button.setOnMouseClicked { DriverHandler().auth(steamProperty, textField.text.trim()) }
         super.init(root)
     }
 

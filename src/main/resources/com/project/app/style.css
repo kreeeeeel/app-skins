@@ -164,3 +164,143 @@
     -fx-font-size: 14px;
     -fx-text-fill: #807f7f;
 }
+
+#block-tray {
+    -fx-pref-width: 450px;
+    -fx-pref-height: 196px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#tray-text {
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: true;
+    -fx-pref-width: 360px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #807f7f;
+}
+
+#system {
+    -fx-image: url("files/system.png");
+}
+
+#trayButton {
+    -fx-pref-width: 150px;
+    -fx-background-color: green;
+}
+
+#closeButton {
+    -fx-pref-width: 150px;
+    -fx-background-color: red;
+}
+
+.check-box {
+    -fx-font-family: "Franklin Gothic Medium";
+    -fx-text-fill: #bfbfbf;
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-cursor: HAND;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #806cf5;
+    -fx-mark-color: #ffffff;
+}
+
+#remember-interactive {
+    -fx-font-size: 13px;
+}
+
+.scroll-pane
+{
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport
+{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical
+{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb
+{
+    -fx-background-color: #544f4f;
+    -fx-background-radius: 3em;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 100px;
+}
+.scroll-bar *.increment-arrow,
+.scroll-bar *.decrement-arrow
+{
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .corner
+{
+    -fx-background-color: transparent;
+}
+
+#account {
+    -fx-pref-width: 280px;
+    -fx-pref-height: 120px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 8px;
+}
+
+#account-first {
+    -fx-alignment: CENTER;
+    -fx-pref-width: 127px;
+    -fx-text-fill: #d7d7d7;
+    -fx-font-size: 17px;
+}
+
+#account-second {
+    -fx-text-fill: #686868;
+    -fx-font-size: 13px;
+}
+
+#mouse-entered-account {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-radius: 8px;
+    -fx-pref-width: 280px;
+    -fx-pref-height: 120px;
+}
+
+#mouse-entered-account:hover {
+    -fx-cursor: OPEN_HAND;
+}
+
+#mouse-entered-text {
+    -fx-wrap-text: true;
+    -fx-text-alignment: CENTER;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 190px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #d3d2d2;
+}
+
+#404 {
+    -fx-image: url("files/404.png");
+}
+
+#404-title {
+    -fx-font-size: 21px;
+    -fx-text-fill: white;
+}
+
+#404-description {
+    -fx-font-size: 17px;
+    -fx-text-fill: #909090;
+}
