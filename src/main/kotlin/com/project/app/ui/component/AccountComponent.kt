@@ -6,7 +6,6 @@ import com.project.app.ui.controller.WIDTH
 import javafx.scene.Cursor
 import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
@@ -39,6 +38,11 @@ class AccountComponent {
         if (profiles.isNotEmpty()) {
             drawingProfiles(profiles)
         } else drawingNotFound()
+    }
+
+    fun clear(root: Pane) {
+        content.children.removeAll()
+        root.children.remove(scroll)
     }
 
     private fun drawingNotFound() {

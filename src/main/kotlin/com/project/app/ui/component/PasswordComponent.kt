@@ -9,6 +9,8 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 private const val HINT_TEXT = "Пароль как и все остальные данные будет храниться только на ВАШЕМ компьютере, в зашифрованном виде. После того как вы укажите пароль, приложение проверит что аккаунт является валидным"
 
@@ -79,8 +81,31 @@ class PasswordComponent(
         block.children.addAll(username, textField, button)
         pane.children.add(block)
 
-        button.setOnMouseClicked { DriverHandler().auth(steamProperty, textField.text.trim()) }
+        button.setOnMouseClicked { callback(root) }
         super.init(root)
+    }
+
+    private fun callback(root: Pane) {
+        val loadingComponent = LoadingComponent(root)
+        val messageComponent = MessageComponent(root)
+        val accountComponent = AccountComponent()
+        loadingComponent.initialize()
+
+        var isSuccessAuth = false
+        val future = CompletableFuture.runAsync {
+            isSuccessAuth = DriverHandler().auth(steamProperty, textField.text.trim())
+        }
+
+        future.thenRun {
+            Platform.runLater {
+                loadingComponent.clear()
+                if (isSuccessAuth) {
+                    messageComponent.drawSuccessMessage("Аккаунт был успешно добавлен!")
+                    accountComponent.clear(root)
+                    accountComponent.init(root)
+                } else messageComponent.drawErrorMessage("Возможно вы указали неверный пароль, попробуйте еще раз..")
+            }
+        }
     }
 
 }

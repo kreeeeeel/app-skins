@@ -304,3 +304,34 @@
     -fx-font-size: 17px;
     -fx-text-fill: #909090;
 }
+
+#loading {
+    -fx-image: url("files/loading.gif");
+}
+
+#loading-text {
+    -fx-text-fill: white;
+    -fx-font-size: 21px;
+}
+
+#message-title {
+    -fx-pref-width: 265px;
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-size: 29px;
+}
+
+#message-description {
+    -fx-pref-width: 1200px;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #b5b5b5;
+    -fx-font-size: 21px;
+}
+
+#error {
+    -fx-image: url("files/error.png");
+}
+
+#success {
+    -fx-image: url("files/success.png");
+}
