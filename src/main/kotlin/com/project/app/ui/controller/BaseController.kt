@@ -4,6 +4,7 @@ import com.project.app.Desktop
 import com.project.app.task.Task
 import com.project.app.ui.component.TrayComponent
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.scene.Cursor
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -19,6 +20,12 @@ const val WIDTH = 1200.0
 const val HEIGHT = 700.0
 
 const val ICON_TRAY = "files/logo.png"
+
+private val HINT_TASK = """
+    Данный блок показывает, что сейчас приложение выполняет. 
+    Приложение в фоном режиме смотрит, на каких аккаунтах можно начать продавать инвентарь. 
+    Если какие-то предмете подлежат выгодной продаже, вам придет уведомление.
+""".trimIndent()
 
 open class BaseController: Application() {
 
@@ -54,6 +61,8 @@ open class BaseController: Application() {
         it.id = "task"
         it.layoutX = 400.0
         it.layoutY = 33.0
+
+        showTaskHint(it)
     }
 
     private val taskText = Label("Ожидание запуска задачи..").also {
@@ -140,6 +149,25 @@ open class BaseController: Application() {
             }
         }
 
+    }
+
+    private fun showTaskHint(taskPane: Pane) = Platform.runLater {
+        val pane = Pane().also {
+            it.id = "task-hint"
+            it.layoutX = 290.0
+            it.layoutY = 70.0
+
+            val text = Label(HINT_TASK).also { l ->
+                l.id = "task-hint-text"
+                l.layoutX = 0.0
+                l.layoutY = 10.0
+            }
+
+            it.children.add(text)
+        }
+
+        taskPane.setOnMouseEntered { root.children.add(pane) }
+        taskPane.setOnMouseExited { root.children.removeIf { it.id == "task-hint" } }
     }
 
 }

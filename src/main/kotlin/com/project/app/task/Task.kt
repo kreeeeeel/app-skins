@@ -46,7 +46,7 @@ class TaskTimer(
                 val config = configRepository.find()
 
                 task.status = TaskStatus.WAIT
-                seconds = config.hourChecked * 5
+                seconds = config.hourChecked * 3600
             }
 
             val remainingSeconds = if (task.status == TaskStatus.STARTED) seconds!! + 1 else seconds!! - 1

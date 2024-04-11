@@ -1,8 +1,10 @@
-package com.project.app.property
+package com.project.app.service.impl
 
-import com.google.gson.annotations.SerializedName
+import com.google.gson.GsonBuilder
 import com.project.app.client.api.TwoFactorService
+import com.project.app.service.SteamGuard
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.ByteBuffer
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -11,28 +13,22 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 private const val symbols = "23456789BCDFGHJKMNPQRTVWXY"
-private val client = Retrofit.Builder()
-    .baseUrl("https://api.steampowered.com/")
-    .build()
 
-private val twoFactorService: TwoFactorService = client.create(TwoFactorService::class.java)
+class DefaultSteamGuard: SteamGuard {
 
-data class SteamProperty(
-    @SerializedName("shared_secret") val sharedSecret: String,
-    @SerializedName("serial_number") val serialNumber: String,
-    @SerializedName("revocation_code") val revocationCode: String,
-    @SerializedName("uri") val uri: String,
-    @SerializedName("server_time") val serverTime: Long,
-    @SerializedName("account_name") val accountName: String,
-    @SerializedName("token_gid") val tokenGid: String,
-    @SerializedName("identity_secret") val identitySecret: String,
-    @SerializedName("secret_1") val secret1: String,
-    @SerializedName("status") val status: Int,
-    @SerializedName("device_id") val deviceId: String,
-    @SerializedName("fully_enrolled") val fullyEnrolled: Boolean,
-    @SerializedName("Session") val session: Session
-) {
-    fun getSteamGuard(): String {
+    private val client = Retrofit.Builder()
+        .baseUrl("https://api.steampowered.com/ITwoFactorService/")
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder()
+                    .setLenient()
+                    .create()
+            )
+        ).build()
+
+    private val steamTimeApi: TwoFactorService = client.create(TwoFactorService::class.java)
+
+    override fun getCode(sharedSecret: String): String {
         val timestamp = System.currentTimeMillis() / 1000 + getQueryTime()
         val hmac = hmacSha1(sharedSecret, timestamp / 30)
         val ord = hmac[19].toInt() and 0xF
@@ -48,13 +44,9 @@ data class SteamProperty(
     }
 
     private fun getQueryTime(): Long {
-        try {
-            val execute = twoFactorService.getServerTime().execute()
-            return execute.body()!!.serverTime.toLong()
-        } catch (exception: Exception) {
-            return 0
-        }
+        return steamTimeApi.getTime().execute().body()?.serverTime?.toLong() ?: return 0
     }
+
 
     private fun hmacSha1(key: String, value: Long): ByteArray {
         val mac: Mac
@@ -70,10 +62,3 @@ data class SteamProperty(
         return mac.doFinal(ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(value).array())
     }
 }
-
-data class Session(
-    @SerializedName("SteamID") val steamID: Long,
-    @SerializedName("AccessToken") val accessToken: String,
-    @SerializedName("RefreshToken") val refreshToken: String,
-    @SerializedName("SessionID") val sessionID: String?
-)

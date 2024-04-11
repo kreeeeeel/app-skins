@@ -10,6 +10,9 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
+import java.awt.Desktop
+import java.net.URI
+import java.net.URL
 import kotlin.math.max
 
 private const val DEFAULT_HEIGHT = 536.0
@@ -92,7 +95,7 @@ class AccountComponent(
             it.id = "mouse-entered-account"
         }
 
-        val text = Label("Намжите, чтобы посмотреть информацию о профиле").also {
+        val text = Label("Намжите, чтобы открыть профиль в браузере").also {
             it.id = "mouse-entered-text"
             it.layoutX = 45.0
             it.layoutY = 42.0
@@ -122,6 +125,12 @@ class AccountComponent(
 
         profilePane.setOnMouseEntered { profilePane.children.add(pane) }
         profilePane.setOnMouseExited { profilePane.children.removeIf { it.id == "mouse-entered-account" } }
+        profilePane.setOnMouseClicked {
+            Desktop.getDesktop().browse(
+                URI.create("https://steamcommunity.com/profiles/${profileProperty.steam?.session?.steamID}")
+            )
+        }
+
         remove.setOnMouseClicked {
             val dropAccountComponent = DropAccountComponent()
             dropAccountComponent.setProfile(profileProperty)
@@ -179,7 +188,7 @@ class AccountComponent(
                 it.layoutY = 37.0
             }
 
-            val cost = Label(profileProperty.inventory?.summa.toString()).also {
+            val cost = Label(( profileProperty.inventory?.summa ?: 0.0 ).toString()).also {
                 it.id = "account-first"
                 it.layoutX = 124.0
                 it.layoutY = 65.0

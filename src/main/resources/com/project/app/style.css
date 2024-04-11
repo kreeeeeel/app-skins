@@ -146,6 +146,15 @@
     -fx-pref-height: 30px;
 }
 
+#task:hover {
+    -fx-cursor: HAND;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    /*-fx-border-radius: 24px;
+    -fx-border-color: #97999d;
+    -fx-border-width: 3px;*/
+}
+
 #task-text {
     -fx-font-size: 14px;
     -fx-text-fill: #9a9797;
@@ -390,4 +399,20 @@
 #cancel-drop-account:hover {
     -fx-cursor: HAND;
     -fx-background-color: #022f71;
+}
+
+#task-hint {
+    -fx-pref-width: 630px;
+    -fx-pref-height: 70px;
+    -fx-background-color: black;
+    -fx-background-radius: 24px;
+}
+
+#task-hint-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #aeaeae;
+    -fx-pref-width: 630px;
+    -fx-wrap-text: true;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
