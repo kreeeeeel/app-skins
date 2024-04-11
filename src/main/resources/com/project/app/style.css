@@ -8,6 +8,7 @@
 }
 
 .button {
+    -fx-focus-traversable: false;
     -fx-font-family: "Franklin Gothic Medium";
     -fx-font-size: 18px;
     -fx-text-fill: #ffffff;
@@ -15,6 +16,11 @@
     -fx-background-color: #806cf5;
     -fx-pref-width: 220.0;
     -fx-pref-height: 35.0;
+}
+
+.button:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #51459d;
 }
 
 .text-field {
@@ -152,6 +158,14 @@
     -fx-image: url("files/orange.png");
 }
 
+#red {
+    -fx-image: url("files/red.png");
+}
+
+#green {
+    -fx-image: url("files/green.png");
+}
+
 #username-ma-file {
     -fx-font-size: 21px;
     -fx-text-fill: #bfbfbf;
@@ -189,9 +203,19 @@
     -fx-background-color: green;
 }
 
+#trayButton:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #015f01;
+}
+
 #closeButton {
     -fx-pref-width: 150px;
     -fx-background-color: red;
+}
+
+#closeButton:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #a20303;
 }
 
 .check-box {
@@ -334,4 +358,36 @@
 
 #success {
     -fx-image: url("files/success.png");
+}
+
+#block-drop-account {
+    -fx-pref-width: 405px;
+    -fx-pref-height: 175px;
+    -fx-background-color: #1a1c21;
+    -fx-background-radius: 8px;
+}
+
+#block-drop-account-text {
+    -fx-font-size: 17px;
+    -fx-text-fill: #a8a8a8;
+}
+
+#drop-account {
+    -fx-pref-width: 150px;
+    -fx-background-color: #a20303;
+}
+
+#drop-account:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #610101;
+}
+
+#cancel-drop-account {
+    -fx-pref-width: 150px;
+    -fx-background-color: #0343a2;
+}
+
+#cancel-drop-account:hover {
+    -fx-cursor: HAND;
+    -fx-background-color: #022f71;
 }

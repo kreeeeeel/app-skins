@@ -1,6 +1,7 @@
 package com.project.app.ui.controller
 
 import com.project.app.Desktop
+import com.project.app.task.Task
 import com.project.app.ui.component.TrayComponent
 import javafx.application.Application
 import javafx.scene.Cursor
@@ -109,8 +110,12 @@ open class BaseController: Application() {
                 it.icons.add(Image(Desktop::class.java.getResourceAsStream(ICON_TRAY)))
             } finally {
                 it.show()
+                it.toFront()
             }
         }
+
+        val task = Task(taskText, taskIcon)
+        task.run()
     }
 
     companion object {

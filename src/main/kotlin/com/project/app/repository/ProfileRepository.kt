@@ -40,4 +40,13 @@ class ProfileRepository() {
 
     }
 
+    fun remove(profileProperty: ProfileProperty): Boolean {
+        val path = String.format("%s\\%s\\%s",
+            System.getProperty("user.dir"), PATH_TO_PROFILES, profileProperty.steam!!.session.steamID
+        )
+
+        val file = File(path)
+        return file.deleteRecursively()
+    }
+
 }

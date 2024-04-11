@@ -40,8 +40,8 @@ class AccountController: BaseController() {
             fileComponent.animate()
         }
 
-        val accountComponent = AccountComponent()
-        accountComponent.init(root)
+        val accountComponent = AccountComponent(root)
+        accountComponent.initializeOrUpdate()
 
         super.start(primaryStage)
     }

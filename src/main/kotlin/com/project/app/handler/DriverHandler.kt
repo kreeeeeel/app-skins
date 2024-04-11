@@ -14,21 +14,51 @@ class DriverHandler {
     fun auth(steamProperty: SteamProperty, password: String): Boolean {
         try {
             val authHandler = SteamAuthHandler(webDriver, webDriverWait)
-
             val profileProperty = authHandler.getProfileProperty(steamProperty, password)
+
+            val lisSkinHandler = LisSkinHandler(webDriver, webDriverWait)
+            lisSkinHandler.auth(profileProperty.tradeLink)
+
+            val inventory = lisSkinHandler.getInventory()
+            profileProperty.inventory = inventory
+
             val profileRepository = ProfileRepository()
             profileRepository.save(profileProperty)
 
-            val lisSkinHandler = LisSkinHandler(webDriver, webDriverWait)
-            lisSkinHandler.auth()
-
             return true
         } catch (e: Exception) {
-            println(e.message)
             return false
         } finally {
             webDriver.quit()
         }
     }
+
+    fun startTask() {
+        val steamAuthHandler = SteamAuthHandler(webDriver, webDriverWait)
+        val lisSkinHandler = LisSkinHandler(webDriver, webDriverWait)
+        val profileRepository = ProfileRepository()
+
+        for (profile in profileRepository.findAll()) {
+            try {
+                steamAuthHandler.auth(profile)
+                lisSkinHandler.auth()
+                lisSkinHandler.getInventory()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                val currentWindowHandle = webDriver.windowHandles.elementAt(0)
+                webDriver.windowHandles.forEach { window ->
+                    if (window != currentWindowHandle) {
+                        webDriver.switchTo().window(window)
+                        webDriver.close()
+                    }
+                }
+                webDriver.switchTo().window(currentWindowHandle)
+                webDriver.manage().deleteAllCookies()
+            }
+        }
+        webDriver.quit()
+    }
+
 
 }

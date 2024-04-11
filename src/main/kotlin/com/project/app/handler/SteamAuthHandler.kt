@@ -28,9 +28,15 @@ class SteamAuthHandler(
         guardPageClick()
         inputGuard(steamProperty.getSteamGuard())
 
-        val profileData = getProfileData()
+        val profileData = getProfileData(password)
         profileData.steam = steamProperty
         return profileData
+    }
+
+    fun auth(property: ProfileProperty) {
+        inputCredentials(property.steam!!.accountName, property.password)
+        guardPageClick()
+        inputGuard(property.steam!!.getSteamGuard())
     }
 
     private fun inputCredentials(
@@ -61,7 +67,7 @@ class SteamAuthHandler(
         }
     }
 
-    private fun getProfileData(): ProfileProperty {
+    private fun getProfileData(password: String): ProfileProperty {
 
         val name = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(xPathName)).text
 
@@ -85,7 +91,8 @@ class SteamAuthHandler(
             name = name,
             avatar = avatar!!,
             frame = frame,
-            tradeLink = tradeLink
+            tradeLink = tradeLink,
+            password = password
         )
     }
 

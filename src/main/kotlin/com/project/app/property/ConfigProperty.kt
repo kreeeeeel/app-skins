@@ -1,6 +1,7 @@
 package com.project.app.property
 
 import com.project.app.property.type.BrowserType
+import java.math.BigDecimal
 
 data class ConfigProperty(
     var browser: BrowserType = BrowserType.FIREFOX,
@@ -8,6 +9,8 @@ data class ConfigProperty(
     var phone: String? = null,
     var card: CardProperty? = null,
     var isTrayEnabled: Boolean? = null,
+    var currentCostSell: BigDecimal? = null,
+    var hourChecked: Int = 3
 )
 
 data class CardProperty(

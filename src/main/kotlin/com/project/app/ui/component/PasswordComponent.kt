@@ -1,7 +1,6 @@
 package com.project.app.ui.component
 
 import com.project.app.handler.DriverHandler
-import com.project.app.handler.SteamAuthHandler
 import com.project.app.property.SteamProperty
 import javafx.application.Platform
 import javafx.scene.control.Button
@@ -10,7 +9,6 @@ import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executors
 
 private const val HINT_TEXT = "Пароль как и все остальные данные будет храниться только на ВАШЕМ компьютере, в зашифрованном виде. После того как вы укажите пароль, приложение проверит что аккаунт является валидным"
 
@@ -86,10 +84,10 @@ class PasswordComponent(
     }
 
     private fun callback(root: Pane) {
-        val loadingComponent = LoadingComponent(root)
+
+        val loadingComponent = LoadingComponent(root).also { it.initialize() }
         val messageComponent = MessageComponent(root)
-        val accountComponent = AccountComponent()
-        loadingComponent.initialize()
+        val accountComponent = AccountComponent(root)
 
         var isSuccessAuth = false
         val future = CompletableFuture.runAsync {
@@ -99,11 +97,14 @@ class PasswordComponent(
         future.thenRun {
             Platform.runLater {
                 loadingComponent.clear()
-                if (isSuccessAuth) {
+
+                if (!isSuccessAuth) {
+                    messageComponent.drawErrorMessage("Возможно вы указали неверный пароль, попробуйте еще раз..")
+
+                } else {
+                    accountComponent.initializeOrUpdate()
                     messageComponent.drawSuccessMessage("Аккаунт был успешно добавлен!")
-                    accountComponent.clear(root)
-                    accountComponent.init(root)
-                } else messageComponent.drawErrorMessage("Возможно вы указали неверный пароль, попробуйте еще раз..")
+                }
             }
         }
     }
