@@ -1,4 +1,4 @@
-package com.project.app.service.impl
+package com.project.app.service.steam.impl
 
 import com.google.gson.GsonBuilder
 import com.project.app.client.api.Authentication
@@ -7,14 +7,16 @@ import com.project.app.client.api.Transfer
 import com.project.app.client.response.RefreshTokenResponse
 import com.project.app.client.response.SteamDataResponse
 import com.project.app.client.response.TransferResponse
-import com.project.app.service.PasswordEncryptor
-import com.project.app.service.SteamAuthClient
-import com.project.app.service.SteamGuard
-import com.project.app.service.models.RSAParam
-import okhttp3.ResponseBody
+import com.project.app.service.encrypto.PasswordEncryptor
+import com.project.app.service.encrypto.impl.DefaultPasswordEncryptor
+import com.project.app.models.RSAParam
+import com.project.app.service.steam.SteamAuthClient
+import com.project.app.service.steam.SteamGuard
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.math.BigInteger
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import java.security.spec.RSAPublicKeySpec
 import java.util.*
 
@@ -34,14 +36,19 @@ class DefaultSteamAuthClient: SteamAuthClient {
         .baseUrl("https://login.steampowered.com/")
         .addConverterFactory(gsonConverterFactory).build()
 
+    private val steamTransferClient = Retrofit.Builder()
+        .baseUrl("https://steamcommunity.com/login/")
+        .addConverterFactory(gsonConverterFactory).build()
+
     private val steamAuthApi = steamAuthClient.create(Authentication::class.java)
     private val steamLoginApi = steamLoginClient.create(LoginFinalize::class.java)
+    private val steamTransferApi = steamTransferClient.create(Transfer::class.java)
 
     private val passwordEncryptor: PasswordEncryptor = DefaultPasswordEncryptor()
     private val steamGuard: SteamGuard = DefaultSteamGuard()
 
     override fun fetchRSAParam(username: String): RSAParam? {
-        val response = steamAuthApi.getRSAPublicKey(username)
+        val response = steamAuthApi.getRSAPublicKey(username = username)
             .execute()
 
         val body = response.body()?.response ?: return null
@@ -77,31 +84,37 @@ class DefaultSteamAuthClient: SteamAuthClient {
     }
 
     override fun pollLoginStatus(clientId: String, requestId: String): RefreshTokenResponse? {
-        val response = steamAuthApi.pollAuthSessionStatus(clientId, requestId).execute()
+        val response = steamAuthApi.pollAuthSessionStatus(clientId = clientId, requestId = requestId).execute()
         return response.body()?.response
 
     }
 
     override fun finalizeLogin(refreshToken: String): TransferResponse? {
-        val response = steamLoginApi.finalizeLogin(refreshToken, getRandomHexString()).execute()
+        val response = steamLoginApi.finalizeLogin(nonce = refreshToken, sessionId = getRandomHexString()).execute()
         return response.body()
     }
 
-    // Доставать отсюда куки
-    override fun upgradeCookie(transferResponse: TransferResponse) {
-        transferResponse.transferInfo.forEach {
+    override fun getCommunityCookie(transferResponse: TransferResponse): String? {
 
-            val client = Retrofit.Builder()
-                .baseUrl(it.url.replace("settoken", ""))
-                .addConverterFactory(gsonConverterFactory).build()
+        val transferInfo = transferResponse.transferInfo.firstOrNull {
+            it.url.startsWith(
+                steamTransferClient.baseUrl().url().toString()
+            )
+        } ?: return null
 
-            val api = client.create(Transfer::class.java)
-            val execute = api.transfer(it.params.nonce, it.params.auth, transferResponse.steamID).execute()
-            if (!execute.isSuccessful) {
-                throw RuntimeException("хуйня какая-то")
-            }
+        val response = steamTransferApi.transfer(
+            nonce = transferInfo.params.nonce,
+            auth = transferInfo.params.auth,
+            steamId = transferResponse.steamID
+        ).execute()
 
+        val cookie = response.headers()["Set-Cookie"] ?: return null
+        val index = cookie.indexOf(";")
+        if (index == -1) {
+            return null
         }
+
+        return URLDecoder.decode(cookie.substring(0, index), StandardCharsets.UTF_8)
     }
 
     private fun getRandomHexString(): String {

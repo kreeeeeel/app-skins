@@ -120,16 +120,6 @@
     -fx-pref-height: 205px;
 }
 
-#ma-file-drag {
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
-    -fx-border-color: #ffffff;
-    -fx-background-color: #1d2127;
-    -fx-background-radius: 8px;
-    -fx-pref-width: 250px;
-    -fx-pref-height: 205px;
-}
-
 #ma-file-text {
     -fx-font-size: 14px;
     -fx-text-fill: #807f7f;
@@ -144,15 +134,6 @@
     -fx-background-color: #2a2d33;
     -fx-pref-width: 400px;
     -fx-pref-height: 30px;
-}
-
-#task:hover {
-    -fx-cursor: HAND;
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    /*-fx-border-radius: 24px;
-    -fx-border-color: #97999d;
-    -fx-border-width: 3px;*/
 }
 
 #task-text {
@@ -415,4 +396,140 @@
     -fx-wrap-text: true;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
+}
+
+#import {
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 355px;
+}
+
+#import-file-hint {
+    -fx-pref-width: 220px;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-size: 14px;
+    -fx-text-fill: #807f7f;
+}
+
+#import-keyboard {
+    -fx-font-size: 15px;
+    -fx-text-fill: #8a8a8a;
+}
+
+#import-keyboard:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #c7c7c7;
+}
+
+#importFile {
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 235px;
+}
+
+#look {
+    -fx-background-radius: 8px;
+    -fx-pref-width: 150px;
+}
+
+#invalid-data {
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 700px;
+    -fx-pref-height: 64px;
+}
+
+#invalid-data-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #cdcdcd;
+}
+
+#invalidPassword {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 438px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#titleInvalidPass {
+    -fx-text-fill: #cdcdcd;
+    -fx-font-size: 17px;
+}
+
+#descInvalidPass {
+    -fx-text-fill: #807e7e;
+    -fx-font-size: 14px;
+}
+
+#fieldInvalidPass {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 235px;
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+}
+
+#hintInvalidPass {
+    -fx-pref-width: 250px;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-size: 14px;
+    -fx-text-fill: #8a8a8a;
+}
+
+#dataInvalidPass {
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+}
+
+#textForData {
+    -fx-font-size: 17px;
+    -fx-text-fill: #cdcdcd;
+    -fx-pref-width: 178px;
+}
+
+#question {
+    -fx-image: url("files/question.png");
+}
+
+#keyboardPass {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 55px;
+    -fx-background-radius: 16px;
+    -fx-background-color: #2a2d33;
+}
+
+#keyboardPassTitle {
+    -fx-font-size: 17px;
+    -fx-text-fill: #cdcdcd;
+}
+
+#keyboardPassDesc {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807e7e;
+}
+
+#right {
+    -fx-image: url("files/right.png");
+}
+
+#left {
+    -fx-image: url("files/left.png");
+}
+
+#arrow {
+    -fx-opacity: 0.7;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 90px;
+}
+
+#arrow:hover {
+    -fx-opacity: 1.0;
+    -fx-cursor: hand;
 }

@@ -1,8 +1,8 @@
-package com.project.app.service.impl
+package com.project.app.service.steam.impl
 
 import com.google.gson.GsonBuilder
 import com.project.app.client.api.TwoFactorService
-import com.project.app.service.SteamGuard
+import com.project.app.service.steam.SteamGuard
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.ByteBuffer
@@ -12,7 +12,7 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-private const val symbols = "23456789BCDFGHJKMNPQRTVWXY"
+private const val SYMBOLS = "23456789BCDFGHJKMNPQRTVWXY"
 
 class DefaultSteamGuard: SteamGuard {
 
@@ -36,9 +36,9 @@ class DefaultSteamGuard: SteamGuard {
         val codeBuilder = StringBuilder()
         var tempValue = value
         repeat(5) {
-            val symbolIndex = tempValue % symbols.length
-            codeBuilder.append(symbols[symbolIndex])
-            tempValue /= symbols.length
+            val symbolIndex = tempValue % SYMBOLS.length
+            codeBuilder.append(SYMBOLS[symbolIndex])
+            tempValue /= SYMBOLS.length
         }
         return codeBuilder.toString()
     }
@@ -46,7 +46,6 @@ class DefaultSteamGuard: SteamGuard {
     private fun getQueryTime(): Long {
         return steamTimeApi.getTime().execute().body()?.serverTime?.toLong() ?: return 0
     }
-
 
     private fun hmacSha1(key: String, value: Long): ByteArray {
         val mac: Mac

@@ -1,7 +1,6 @@
 package com.project.app.client.api
 
 import com.project.app.client.response.TransferResponse
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -13,7 +12,7 @@ interface LoginFinalize {
     @FormUrlEncoded
     @POST("jwt/finalizelogin")
     fun finalizeLogin(
-        @Field("nonce") refreshToken: String,
+        @Field("nonce") nonce: String,
         @Field("sessionid") sessionId: String,
         @Field("redir") reDir: String = "https://steamcommunity.com/login/home/?goto=",
         @Header("accept") accept: String = "application/json, text/plain, */*",

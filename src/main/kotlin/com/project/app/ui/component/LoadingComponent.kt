@@ -34,5 +34,5 @@ class LoadingComponent(
     }
 
     fun initialize() = Platform.runLater{ root.children.add(pane) }
-    fun clear() = Platform.runLater { root.children.removeIf { it.id == "background" } }
+    fun clear() = Platform.runLater { root.children.remove(pane) }
 }

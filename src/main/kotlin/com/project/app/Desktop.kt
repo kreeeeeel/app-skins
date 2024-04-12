@@ -1,15 +1,12 @@
 package com.project.app
 
-import com.project.app.repository.ProfileRepository
-import com.project.app.service.SteamAuthClient
-import com.project.app.service.impl.DefaultSteamAuthClient
 import com.project.app.ui.controller.AccountController
 import javafx.application.Application
 
 class Desktop
 
 fun main() {
-    val profileRepository = ProfileRepository()
+    /*val profileRepository = ProfileRepository()
     val profileProperty = profileRepository.findAll()[0]
 
     val steamAuthClient: SteamAuthClient = DefaultSteamAuthClient()
@@ -20,7 +17,7 @@ fun main() {
     val pollLoginStatus = steamAuthClient.pollLoginStatus(beginAuth.clientId, beginAuth.requestId)
     val finalizeLogin = steamAuthClient.finalizeLogin(pollLoginStatus!!.refreshToken)
 
-    steamAuthClient.upgradeCookie(finalizeLogin!!)
+    println(steamAuthClient.getCommunityCookie(finalizeLogin!!))*/
 
     Application.launch(AccountController::class.java)
 }

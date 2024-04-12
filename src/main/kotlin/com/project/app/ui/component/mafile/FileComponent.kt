@@ -1,6 +1,8 @@
-package com.project.app.ui.component
+package com.project.app.ui.component.mafile
 
-import com.project.app.handler.MaFileHandler
+import com.project.app.service.mafile.ImportFile
+import com.project.app.service.mafile.impl.DefaultImportFile
+import com.project.app.ui.component.BaseComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -10,10 +12,12 @@ import javafx.scene.layout.Pane
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import java.io.File
+import java.util.concurrent.CompletableFuture
 
 
-private const val HINT_TEXT = "Загрузите файл с расширением .maFile. После загрузки, в новом окне, укажите пароль от аккаунта"
+private const val HINT_TEXT = "Загрузите файлы с расширением .maFile. После загрузки, появится окно с паролем.."
 
+@Suppress("unused")
 class FileComponent: BaseComponent() {
 
     private val block = Pane().also {
@@ -35,7 +39,7 @@ class FileComponent: BaseComponent() {
             l.layoutY = 14.0
         }
 
-        val description = Label("Авторизация через Steam").also { l ->
+        val description = Label("Загрузка файлов").also { l ->
             l.id = "description-ma-file"
             l.layoutX = 80.0
             l.layoutY = 34.0
@@ -68,7 +72,7 @@ class FileComponent: BaseComponent() {
         block.children.add(it)
     }
 
-    private val hint: Label = Label("Перетащите файл .maFile в поле").also{
+    private val hint: Label = Label("Перетащите файлы .maFile в поле").also{
         it.id = "ma-file-text"
         it.layoutX = 25.0
         it.layoutY = 121.0
@@ -76,7 +80,7 @@ class FileComponent: BaseComponent() {
         field.children.add(it)
     }
 
-    private val button = Button("Выбрать файл").also {
+    private val button = Button("Выбрать файлы").also {
         it.layoutX = 15.0
         it.layoutY = 157.0
 
@@ -84,60 +88,48 @@ class FileComponent: BaseComponent() {
     }
 
     override fun init(root: Pane) = Platform.runLater {
-
         field.setOnDragOver { event ->
             if (event.dragboard.hasFiles()) {
                 event.acceptTransferModes(TransferMode.COPY)
             }
             event.consume()
         }
-
         field.setOnDragDropped { event ->
             if (event.dragboard.hasFiles()) {
                 event.isDropCompleted = true
-
-                val file = event.dragboard.files[0]
-                setupPassword(file, root)
+                handeImport(event.dragboard.files)
             }
             event.consume()
         }
-
-        field.setOnDragEntered { event ->
-            if (event.dragboard.hasFiles()) {
-                field.id = "ma-file-drag"
-                hint.text = "Ловлю! Отпускай, я поймаю..."
-            }
-        }
-        field.setOnDragExited {
-            field.id = "ma-file"
-            hint.text = "Перетащите файл .maFile в поле"
-        }
-
-        button.setOnMouseClicked { showOpenDialog(root) }
+        button.setOnMouseClicked { showOpenDialog() }
 
         super.init(root)
     }
 
-    private fun showOpenDialog(root: Pane) {
+    private fun showOpenDialog() {
         val fileChooser = FileChooser().also {
             it.title = "Выберите .maFile"
             it.extensionFilters.add(FileChooser.ExtensionFilter("Ma File", "*.maFile"))
         }
 
         val stage = button.scene.window as Stage
-        val selectedFile = fileChooser.showOpenDialog(stage)
-        if (selectedFile != null){
-            setupPassword(selectedFile, root)
+        val files = fileChooser.showOpenMultipleDialog(stage)
+        if (files != null){
+            handeImport(files)
         }
     }
 
-    private fun setupPassword(file: File, root: Pane) = Platform.runLater {
+    private fun handeImport(files: List<File>) {
+        val root = pane.parent as Pane
 
-        val maFileHandler = MaFileHandler()
-        val steamProperty = maFileHandler.getSteamProperty(file)
+        CompletableFuture.supplyAsync {
+            val importFile: ImportFile = DefaultImportFile()
+            val import = importFile.import(files)
 
-        if (steamProperty != null) {
-            PasswordComponent(steamProperty).init(root)
+            Platform.runLater {
+                root.children.remove(pane)
+                ImportComponent(import).init(root)
+            }
         }
     }
 
