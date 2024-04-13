@@ -120,6 +120,16 @@
     -fx-pref-height: 205px;
 }
 
+#ma-file-drag {
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 205px;
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+    -fx-border-radius: 8px;
+}
+
 #ma-file-text {
     -fx-font-size: 14px;
     -fx-text-fill: #807f7f;
@@ -246,7 +256,7 @@
 .scroll-bar:vertical .thumb
 {
     -fx-background-color: #544f4f;
-    -fx-background-radius: 3em;
+    -fx-background-radius: 2em;
 }
 
 .scroll-bar .increment-button,
@@ -431,6 +441,16 @@
     -fx-pref-height: 235px;
 }
 
+#importFileDrag {
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 235px;
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+    -fx-border-radius: 8px;
+}
+
 #look {
     -fx-background-radius: 8px;
     -fx-pref-width: 150px;
@@ -532,4 +552,129 @@
 #arrow:hover {
     -fx-opacity: 1.0;
     -fx-cursor: hand;
+}
+
+#attemptAuthSteam {
+    -fx-font-size: 17px;
+    -fx-text-fill: #9e9c9c;
+    -fx-pref-width: 179px;
+    -fx-alignment: center;
+}
+
+#waitAuthSteam {
+    -fx-font-size: 20px;
+    -fx-text-fill: #eeeeee;
+}
+
+#steam {
+    -fx-image: url("files/steam.png")
+}
+
+#authSteam {
+    -fx-background-radius: 16px;
+    -fx-background-color: #2a2d33;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 60px;
+}
+
+#titleAuthSteam {
+    -fx-font-size: 20px;
+    -fx-text-fill: #eeeeee;
+}
+
+#accountAuthSteam {
+    -fx-font-size: 17px;
+    -fx-text-fill: #b9b9b9;
+}
+
+#invalidAuth {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 400px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#invalidAuthTitle {
+    -fx-font-size: 17px;
+    -fx-text-fill: #cdcdcd;
+}
+
+#invalidAuthDesc {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807e7e;
+}
+
+#invalidAuthField {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 225px;
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+}
+
+#off {
+    -fx-image: url("files/off.png")
+}
+
+#invalidAuthData {
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #2a2d33;
+}
+
+#invalidAuthHint {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807e7e;
+    -fx-pref-width: 250px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
+
+#invalidFiles {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 400px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#invalidFilesField {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 315px;
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+}
+
+#file {
+    -fx-image: url("files/file.png")
+}
+
+#invalidFileData {
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #2a2d33;
+}
+
+#invalidFileData:hover {
+    -fx-cursor: hand;
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+    -fx-background-color: #232427;
+}
+
+#invalidFileDataText {
+    -fx-pref-width: 175px;
+    -fx-font-size: 17px;
+    -fx-text-fill: #cdcdcd;
+}
+
+#invalidFilesHint {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807e7e;
+    -fx-pref-width: 250px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
 }

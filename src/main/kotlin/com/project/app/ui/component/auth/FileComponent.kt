@@ -1,4 +1,4 @@
-package com.project.app.ui.component.mafile
+package com.project.app.ui.component.auth
 
 import com.project.app.service.mafile.ImportFile
 import com.project.app.service.mafile.impl.DefaultImportFile
@@ -15,7 +15,7 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 
-private const val HINT_TEXT = "Загрузите файлы с расширением .maFile. После загрузки, появится окно с паролем.."
+private const val HINT_TEXT = "Загрузите файлы .maFile. После загрузки, появится окно с указанием пароля."
 
 @Suppress("unused")
 class FileComponent: BaseComponent() {
@@ -101,6 +101,17 @@ class FileComponent: BaseComponent() {
             }
             event.consume()
         }
+
+        field.setOnDragEntered { event ->
+            if (event.dragboard.hasFiles()) {
+                field.id = "ma-file-drag"
+                hint.text = "Ловлю! Отпускай, я поймаю..."
+            }
+        }
+        field.setOnDragExited {
+            field.id = "ma-file"
+            hint.text = "Перетащите файл .maFile в поле"
+        }
         button.setOnMouseClicked { showOpenDialog() }
 
         super.init(root)
@@ -128,7 +139,7 @@ class FileComponent: BaseComponent() {
 
             Platform.runLater {
                 root.children.remove(pane)
-                ImportComponent(import).init(root)
+                PasswordComponent(import).init(root)
             }
         }
     }

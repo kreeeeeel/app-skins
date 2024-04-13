@@ -1,6 +1,6 @@
-package com.project.app.ui.component.mafile
+package com.project.app.ui.component.auth
 
-import com.project.app.models.ValidProperty
+import com.project.app.data.ValidData
 import com.project.app.ui.component.BaseComponent
 import javafx.animation.TranslateTransition
 import javafx.application.Platform
@@ -15,7 +15,7 @@ import javafx.util.Duration
 private const val HINT_TEXT = "Пароль как и все остальные данные будет храниться только на ВАШЕМ компьютере, в зашифрованном виде. После того как вы укажите пароль, приложение проверит что аккаунт является валидным"
 
 class KeyboardPasswordComponent(
-    private val validProperty: List<ValidProperty>,
+    private val validData: List<ValidData>,
 ): BaseComponent() {
 
     private var current = 0
@@ -90,7 +90,7 @@ class KeyboardPasswordComponent(
         it.children.addAll(logo, title, description, hint, hint2)
     }
 
-    private val username = Label(validProperty[current].username).also {
+    private val username = Label(validData[current].username).also {
         it.id = "username-ma-file"
         it.layoutY = 92.0
     }
@@ -171,9 +171,9 @@ class KeyboardPasswordComponent(
         val password = textField.text.trim()
         if (password.isNotEmpty()) {
 
-            validProperty[current++].password = password
-            if (current == validProperty.size) {
-                println("авторизация")
+            validData[current++].password = password
+            if (current == validData.size) {
+                SteamComponent(validData).start(pane.parent as Pane)
             } else {
                 refreshUi()
             }
@@ -196,7 +196,7 @@ class KeyboardPasswordComponent(
             val rightIcon = right.children.first { it.id == "right" } as ImageView
 
             left.isDisable = current - 1 < 0
-            right.isDisable = validProperty[current].password == null
+            right.isDisable = validData[current].password == null
 
             leftIcon.opacity = if (left.isDisable) 0.5 else 1.0
             rightIcon.opacity = if (right.isDisable) 0.5 else 1.0
@@ -204,9 +204,9 @@ class KeyboardPasswordComponent(
             title.text = getTitle()
             desc.text = getDesc()
 
-            username.text = validProperty[current].username
-            if (validProperty[current].password != null) {
-                textField.text = validProperty[current].password
+            username.text = validData[current].username
+            if (validData[current].password != null) {
+                textField.text = validData[current].password
                 textField.positionCaret(textField.text.length)
             } else {
                 textField.clear()
@@ -224,10 +224,10 @@ class KeyboardPasswordComponent(
         }
     }
 
-    private fun getTitle(): String = "Ручной ввод ${current + 1} из ${validProperty.size}"
+    private fun getTitle(): String = "Ручной ввод ${current + 1} из ${validData.size}"
 
     private fun getDesc(): String =
-        if (current == validProperty.size - 1) "Последний ввод" else "Осталось ${validProperty.size - current}"
+        if (current == validData.size - 1) "Последний ввод" else "Осталось ${validData.size - current}"
 
 
 }

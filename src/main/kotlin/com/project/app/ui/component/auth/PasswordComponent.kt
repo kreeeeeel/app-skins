@@ -1,6 +1,6 @@
-package com.project.app.ui.component.mafile
+package com.project.app.ui.component.auth
 
-import com.project.app.models.ImportAccount
+import com.project.app.data.MaFileData
 import com.project.app.service.mafile.ImportFile
 import com.project.app.service.mafile.impl.DefaultImportFile
 import com.project.app.ui.component.BaseComponent
@@ -17,8 +17,8 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 @Suppress("unused")
-class ImportComponent(
-    private val importAccount: ImportAccount
+class PasswordComponent(
+    private val maFileData: MaFileData
 ): BaseComponent() {
 
     private val block = Pane().also {
@@ -94,6 +94,18 @@ class ImportComponent(
             event.consume()
         }
 
+        it.setOnDragEntered { event ->
+            if (event.dragboard.hasFiles()) {
+                it.id = "importFileDrag"
+                hint.text = "Я очень сильно надеюсь, что это файл .txt и в нем действительно пароли"
+            }
+        }
+
+        it.setOnDragExited { _ ->
+            it.id = "importFile"
+            hint.text = "Перетащите файл с паролями, запись должна быть в формате username:password"
+        }
+
         it.children.addAll(logo, hint)
         block.children.add(it)
     }
@@ -120,7 +132,7 @@ class ImportComponent(
         it.id = "invalid-data"
         it.layoutX = 252.0
         it.layoutY = 593.0
-        it.isVisible = importAccount.badFiles.isNotEmpty()
+        it.isVisible = maFileData.invalid.isNotEmpty()
 
         val icon = ImageView().also { img ->
             img.id = "error"
@@ -130,7 +142,7 @@ class ImportComponent(
             img.layoutY = 8.0
         }
 
-        val text = Label("${importAccount.badFiles.size} файл(-ов) из ${importAccount.size} оказались невалидными!").also { l ->
+        val text = Label("${maFileData.invalid.size} файл(-ов) из ${maFileData.size} оказались невалидными!").also { l ->
             l.id = "invalid-data-text"
             l.layoutX = 73.0
             l.layoutY = 21.0
@@ -140,6 +152,8 @@ class ImportComponent(
             b.id = "look"
             b.layoutX = 536.0
             b.layoutY = 14.0
+
+            b.setOnMouseClicked { InvalidFileComponent(maFileData.invalid).init(pane.parent as Pane) }
         }
 
         it.children.addAll(icon, text, button)
@@ -167,23 +181,24 @@ class ImportComponent(
 
         CompletableFuture.supplyAsync {
             val importFile: ImportFile = DefaultImportFile()
-            val result = importFile.getPassword(file, importAccount)
+            val result = importFile.getPassword(file, maFileData)
 
-            if (result.users.isEmpty()) {
-                val message = MessageComponent(root)
-                message.drawErrorMessage("В этом файле небыло найдено паролей..")
+            Platform.runLater {
+                if (result.users.isEmpty()) {
+                    val message = MessageComponent(root)
+                    message.drawErrorMessage("В этом файле небыло найдено паролей..")
 
-                loading.clear()
+                    loading.clear()
 
-            } else if (result.invalid.isNotEmpty()) {
+                } else if (result.invalid.isNotEmpty()) {
 
-                Platform.runLater {
                     root.children.remove(pane)
                     loading.clear()
 
                     val component = InvalidPasswordComponent(result)
                     component.init(root)
-                }
+
+                } else SteamComponent(result.users.values.toList()).start(pane.parent as Pane)
             }
         }
 
@@ -192,7 +207,7 @@ class ImportComponent(
     private fun keyboardPassword() {
 
         val root = pane.parent as Pane
-        val component = KeyboardPasswordComponent(importAccount.properties)
+        val component = KeyboardPasswordComponent(maFileData.data)
         component.init(root)
 
     }

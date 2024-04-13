@@ -10,7 +10,8 @@ data class ConfigProperty(
     var card: CardProperty? = null,
     var isTrayEnabled: Boolean? = null,
     var currentCostSell: BigDecimal? = null,
-    var hourChecked: Int = 3
+    var hourChecked: Int = 3,
+    var attemptSteam: Int = 3,
 )
 
 data class CardProperty(

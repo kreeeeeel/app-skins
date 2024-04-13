@@ -9,7 +9,7 @@ import com.project.app.client.response.SteamDataResponse
 import com.project.app.client.response.TransferResponse
 import com.project.app.service.encrypto.PasswordEncryptor
 import com.project.app.service.encrypto.impl.DefaultPasswordEncryptor
-import com.project.app.models.RSAParam
+import com.project.app.data.RSAParam
 import com.project.app.service.steam.SteamAuthClient
 import com.project.app.service.steam.SteamGuard
 import retrofit2.Retrofit

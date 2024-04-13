@@ -1,6 +1,6 @@
-package com.project.app.ui.component.mafile
+package com.project.app.ui.component.auth
 
-import com.project.app.models.PasswordFile
+import com.project.app.data.PasswordFile
 import com.project.app.ui.component.BaseComponent
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -48,6 +48,14 @@ class InvalidPasswordComponent(
         val button = Button("Начать").also { b ->
             b.layoutX = 40.0
             b.layoutY = 384.0
+            b.setOnMouseClicked {
+                val valid = passwordFile.users
+                    .filter { f -> !passwordFile.invalid.contains(f.value.username) }
+                    .map { f -> f.value }
+                    .toList()
+
+                SteamComponent(valid).start(pane.parent as Pane)
+            }
         }
 
         it.children.addAll(logo, title, description, hint, button)

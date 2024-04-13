@@ -1,4 +1,4 @@
-package com.project.app.models
+package com.project.app.data
 
 import java.security.spec.RSAPublicKeySpec
 

@@ -1,14 +1,14 @@
-package com.project.app.models
+package com.project.app.data
 
 import java.io.File
 
-data class ImportAccount(
+data class MaFileData(
     val size: Int,
-    val badFiles: List<File>,
-    val properties: List<ValidProperty>
+    val invalid: List<File>,
+    val data: List<ValidData>
 )
 
-data class ValidProperty(
+data class ValidData(
     val username: String,
     val sharedSecret: String,
     val identitySecret: String,

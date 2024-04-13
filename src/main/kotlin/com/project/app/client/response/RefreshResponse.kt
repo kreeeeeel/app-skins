@@ -7,5 +7,7 @@ data class RefreshResponse(
 )
 
 data class RefreshTokenResponse(
-    @SerializedName("refresh_token") val refreshToken: String,
-)
+    @SerializedName("refresh_token") val refreshToken: String?,
+) {
+    fun isNullable() = refreshToken.isNullOrEmpty()
+}

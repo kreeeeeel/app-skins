@@ -7,7 +7,9 @@ data class SteamAuthResponse(
 )
 
 data class SteamDataResponse(
-    @SerializedName("steamid") val steamId: String,
-    @SerializedName("client_id") val clientId: String,
-    @SerializedName("request_id") val requestId: String,
-)
+    @SerializedName("steamid") val steamId: String?,
+    @SerializedName("client_id") val clientId: String?,
+    @SerializedName("request_id") val requestId: String?,
+) {
+    fun isNullable() = steamId.isNullOrEmpty() || clientId.isNullOrEmpty() || requestId.isNullOrEmpty()
+}
