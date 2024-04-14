@@ -678,3 +678,50 @@
     -fx-text-alignment: center;
     -fx-wrap-text: true;
 }
+
+#filterPane {
+    -fx-background-color: #1b4b7a;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 170px;
+    -fx-pref-height: 36px;
+}
+
+#filterText {
+    -fx-text-fill: #e4e4e4;
+    -fx-font-size: 15px;
+}
+
+#filter {
+    -fx-image: url("files/filter.png");
+}
+
+#filterMenu {
+    -fx-background-color: #1b4b7a;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 170px;
+    -fx-pref-height: 108px;
+}
+
+#filterPointPane {
+    -fx-background-color: #1b4b7a;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 170px;
+    -fx-pref-height: 36px;
+}
+
+#filterPointPane:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #003365;
+}
+
+#date {
+    -fx-image: url("files/date.png");
+}
+
+#login {
+    -fx-image: url("files/login.png");
+}
+
+#calculate {
+    -fx-image: url("files/calculate.png");
+}

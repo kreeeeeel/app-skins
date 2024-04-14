@@ -1,8 +1,11 @@
 package com.project.app.ui.component
 
 import com.project.app.Desktop
+import com.project.app.TITLE
 import com.project.app.repository.ConfigRepository
+import com.project.app.ui.controller.AccountController
 import com.project.app.ui.controller.ICON_TRAY
+import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.CheckBox
@@ -14,6 +17,8 @@ import java.awt.AWTException
 import java.awt.PopupMenu
 import java.awt.SystemTray
 import java.awt.TrayIcon
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
@@ -97,25 +102,30 @@ class TrayComponent: BaseComponent() {
         inTrayOrClose(root.scene.window as Stage)
     }
 
-    private fun inTrayOrClose(stage: Stage) = Platform.runLater {
+    private fun inTrayOrClose(stage: Stage) {
 
         if (SystemTray.isSupported() && configProperty.isTrayEnabled!!) {
 
+            Platform.setImplicitExit(false)
             stage.hide()
 
             val tray = SystemTray.getSystemTray()
             val url = Desktop::class.java.getResource(ICON_TRAY)
 
             val image = ImageIO.read(url)
+            val trayIcon = TrayIcon(image, TITLE).also { it.isImageAutoSize = true }
+            tray.add(trayIcon)
 
-            val trayIcon = TrayIcon(image, "Менеджер предметов")
-            trayIcon.isImageAutoSize = true
-
-            try {
-                tray.add(trayIcon)
-            } catch (e: AWTException) {
-                e.printStackTrace()
-            }
+            trayIcon.addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent?) {
+                    if (e?.clickCount == 1) {
+                        Platform.runLater {
+                            stage.show()
+                            stage.toFront()
+                        }
+                    }
+                }
+            })
 
         } else exitProcess(0)
     }

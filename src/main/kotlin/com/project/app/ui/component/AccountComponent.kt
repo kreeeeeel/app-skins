@@ -125,7 +125,7 @@ class AccountComponent(
 
         profilePane.setOnMouseEntered { profilePane.children.add(pane) }
         profilePane.setOnMouseExited { profilePane.children.removeIf { it.id == "mouse-entered-account" } }
-        profilePane.setOnMouseClicked {
+        pane.setOnMouseClicked {
             Desktop.getDesktop().browse(
                 URI.create("https://steamcommunity.com/profiles/${profileProperty.steam?.session?.steamID}")
             )

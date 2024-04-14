@@ -1,6 +1,7 @@
 package com.project.app.ui.controller
 
 import com.project.app.ui.component.AccountComponent
+import com.project.app.ui.component.FilterComponent
 import com.project.app.ui.component.auth.FileComponent
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
@@ -42,6 +43,9 @@ class AccountController: BaseController() {
 
         val accountComponent = AccountComponent(root)
         accountComponent.initializeOrUpdate()
+
+        val filterComponent = FilterComponent()
+        filterComponent.initialize(root)
 
         super.start(primaryStage)
     }

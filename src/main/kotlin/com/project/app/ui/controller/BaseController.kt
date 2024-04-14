@@ -1,6 +1,8 @@
 package com.project.app.ui.controller
 
+import com.project.app.DESCRIPTION
 import com.project.app.Desktop
+import com.project.app.TITLE
 import com.project.app.task.Task
 import com.project.app.ui.component.TrayComponent
 import javafx.application.Application
@@ -14,6 +16,11 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import java.awt.SystemTray
+import java.awt.TrayIcon
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import javax.imageio.ImageIO
 
 
 const val WIDTH = 1200.0
@@ -41,13 +48,13 @@ open class BaseController: Application() {
             img.fitHeight = 48.0
         }
 
-        val title = Label("Менеджер предметов").also { l ->
+        val title = Label(TITLE).also { l ->
             l.id = "title"
             l.layoutX = 82.0
             l.layoutY = 30.0
         }
 
-        val description = Label("Автоматизированная продажа").also { l ->
+        val description = Label(DESCRIPTION).also { l ->
             l.id = "description"
             l.layoutX = 82.0
             l.layoutY = 47.0
@@ -114,7 +121,7 @@ open class BaseController: Application() {
             stage = it
 
             try {
-                it.title = "Менеджер предметов"
+                it.title = TITLE
                 it.initStyle(StageStyle.TRANSPARENT)
                 it.icons.add(Image(Desktop::class.java.getResourceAsStream(ICON_TRAY)))
             } finally {
@@ -125,6 +132,26 @@ open class BaseController: Application() {
 
         val task = Task(taskText, taskIcon)
         task.run()
+    }
+
+
+    private fun showTaskHint(taskPane: Pane) = Platform.runLater {
+        val pane = Pane().also {
+            it.id = "task-hint"
+            it.layoutX = 290.0
+            it.layoutY = 70.0
+
+            val text = Label(HINT_TASK).also { l ->
+                l.id = "task-hint-text"
+                l.layoutX = 0.0
+                l.layoutY = 10.0
+            }
+
+            it.children.add(text)
+        }
+
+        taskPane.setOnMouseEntered { root.children.add(pane) }
+        taskPane.setOnMouseExited { root.children.removeIf { it.id == "task-hint" } }
     }
 
     companion object {
@@ -149,25 +176,6 @@ open class BaseController: Application() {
             }
         }
 
-    }
-
-    private fun showTaskHint(taskPane: Pane) = Platform.runLater {
-        val pane = Pane().also {
-            it.id = "task-hint"
-            it.layoutX = 290.0
-            it.layoutY = 70.0
-
-            val text = Label(HINT_TASK).also { l ->
-                l.id = "task-hint-text"
-                l.layoutX = 0.0
-                l.layoutY = 10.0
-            }
-
-            it.children.add(text)
-        }
-
-        taskPane.setOnMouseEntered { root.children.add(pane) }
-        taskPane.setOnMouseExited { root.children.removeIf { it.id == "task-hint" } }
     }
 
 }
