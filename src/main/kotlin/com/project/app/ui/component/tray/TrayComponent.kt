@@ -1,11 +1,10 @@
-package com.project.app.ui.component
+package com.project.app.ui.component.tray
 
 import com.project.app.Desktop
 import com.project.app.TITLE
-import com.project.app.repository.ConfigRepository
-import com.project.app.ui.controller.AccountController
+import com.project.app.models.ConfigModel
+import com.project.app.ui.component.BaseComponent
 import com.project.app.ui.controller.ICON_TRAY
-import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.CheckBox
@@ -13,8 +12,6 @@ import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
-import java.awt.AWTException
-import java.awt.PopupMenu
 import java.awt.SystemTray
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
@@ -76,15 +73,15 @@ class TrayComponent: BaseComponent() {
         block.children.add(it)
     }
 
-    private val configRepository = ConfigRepository()
-    private val configProperty = configRepository.find()
+
+    private val configModel = ConfigModel()
 
     override fun init(root: Pane) {
 
         close.setOnMouseClicked { actionOnButton(root, true) }
         collapse.setOnMouseClicked { actionOnButton(root, false) }
 
-        if (configProperty.isTrayEnabled != null) inTrayOrClose(root.scene.window as Stage)
+        if (configModel.isEnabledTray != null) inTrayOrClose(root.scene.window as Stage)
         else {
             pane.children.add(block)
             super.init(root)
@@ -95,16 +92,17 @@ class TrayComponent: BaseComponent() {
     private fun actionOnButton(root: Pane, isClose: Boolean) {
         root.children.remove(pane)
 
-        configProperty.isTrayEnabled = !isClose
+        configModel.isEnabledTray = !isClose
         if (remember.isSelected) {
-            configRepository.save(configProperty)
+            configModel.save()
         }
         inTrayOrClose(root.scene.window as Stage)
     }
 
     private fun inTrayOrClose(stage: Stage) {
 
-        if (SystemTray.isSupported() && configProperty.isTrayEnabled!!) {
+        val inTray = if (configModel.isEnabledTray == null) true else configModel.isEnabledTray!!
+        if (SystemTray.isSupported() && inTray) {
 
             Platform.setImplicitExit(false)
             stage.hide()

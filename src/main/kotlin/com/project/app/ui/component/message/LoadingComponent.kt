@@ -1,4 +1,4 @@
-package com.project.app.ui.component
+package com.project.app.ui.component.message
 
 import com.project.app.ui.controller.HEIGHT
 import com.project.app.ui.controller.WIDTH

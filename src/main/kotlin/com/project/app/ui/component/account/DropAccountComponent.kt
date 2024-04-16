@@ -1,7 +1,9 @@
-package com.project.app.ui.component
+package com.project.app.ui.component.account
 
-import com.project.app.property.ProfileProperty
+import com.project.app.models.ProfileModel
 import com.project.app.repository.ProfileRepository
+import com.project.app.ui.component.BaseComponent
+import com.project.app.ui.component.message.MessageComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -43,23 +45,23 @@ class DropAccountComponent: BaseComponent() {
         super.init(root)
     }
 
-    fun setProfile(profileProperty: ProfileProperty) = Platform.runLater{
-        val pane = AccountComponent.getProfilePane(profileProperty).also {
+    fun setProfile(profileModel: ProfileModel) = Platform.runLater{
+        val pane = Account.getAccountPane(profileModel).also {
             it.layoutX = 60.0
             it.layoutY = -40.0
         }
 
-        drop.setOnMouseClicked { dropAccount(profileProperty) }
+        drop.setOnMouseClicked { dropAccount(profileModel) }
         block.children.add(pane)
     }
 
-    private fun dropAccount(profileProperty: ProfileProperty) {
+    private fun dropAccount(profileModel: ProfileModel) {
         val root = pane.parent as Pane
 
         val profileRepository = ProfileRepository()
         val messageComponent = MessageComponent(root)
 
-        if (!profileRepository.remove(profileProperty)) {
+        if (!profileRepository.remove(profileModel)) {
             messageComponent.drawErrorMessage("Не удалось удалить аккаунт..")
 
         } else {

@@ -4,7 +4,9 @@ import com.google.gson.GsonBuilder
 import com.project.app.data.MaFileData
 import com.project.app.data.PasswordFile
 import com.project.app.data.ValidData
-import com.project.app.property.SteamProperty
+import com.project.app.data.SteamProperty
+import com.project.app.service.logger.Logger
+import com.project.app.service.logger.impl.DefaultLogger
 import com.project.app.service.mafile.ImportFile
 import java.io.File
 import java.io.FileReader
@@ -12,8 +14,11 @@ import java.io.FileReader
 class DefaultImportFile: ImportFile {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
+    private val logger: Logger = DefaultLogger()
 
     override fun import(files: List<File>): MaFileData {
+
+        logger.info("Получение информации с ${files.size} файлов с расширением .maFile")
 
         val names = mutableSetOf<String>()
 
@@ -33,8 +38,13 @@ class DefaultImportFile: ImportFile {
                     file = file
                 )
                 properties.add(validData)
+                logger.info("Файл ${file.name} валиден, полученный аккаунт ${validData.username}.")
 
-            } else invalid.add(file)
+            } else {
+
+                logger.error("Файл ${file.name} невалиден")
+                invalid.add(file)
+            }
 
         }
 
@@ -42,6 +52,7 @@ class DefaultImportFile: ImportFile {
     }
 
     override fun getPassword(file: File, maFileData: MaFileData): PasswordFile {
+
         val users = maFileData.data.associateBy { it.username.lowercase() }.toMutableMap()
         users.values.forEach{ it.password = null }
 

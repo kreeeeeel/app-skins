@@ -2,13 +2,13 @@ package com.project.app.ui.component.auth
 
 import com.project.app.models.SteamModel
 import com.project.app.data.ValidData
+import com.project.app.models.ConfigModel
 import com.project.app.models.ProfileModel
-import com.project.app.repository.ConfigRepository
 import com.project.app.repository.ProfileRepository
 import com.project.app.service.steam.SteamProfile
 import com.project.app.service.steam.impl.DefaultSteamProfile
-import com.project.app.ui.component.AccountComponent
-import com.project.app.ui.component.MessageComponent
+import com.project.app.ui.component.account.AccountComponent
+import com.project.app.ui.component.message.MessageComponent
 import com.project.app.ui.controller.HEIGHT
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
@@ -26,7 +26,7 @@ class SteamComponent(
 ) {
 
     private var currentAttempt: Int = 1
-    private val config = ConfigRepository().find()
+    private val config = ConfigModel()
 
     private val pane = Pane().also{
         it.id = "background"
@@ -104,10 +104,10 @@ class SteamComponent(
         val steamModel = SteamModel(data.username, data.password!!, data.sharedSecret)
         do {
             Platform.runLater {
-                attempt.text = String.format(ATTEMPT, currentAttempt, config.attemptSteam)
+                attempt.text = String.format(ATTEMPT, currentAttempt, config.attemptRequest)
                 username.text = data.username
             }
-        } while (!steamModel.loggedIn() && currentAttempt++ < config.attemptSteam)
+        } while (!steamModel.loggedIn() && currentAttempt++ < config.attemptRequest)
 
         currentAttempt = 1
         if (steamModel.isLoggedIn) {

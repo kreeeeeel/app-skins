@@ -1,4 +1,4 @@
-package com.project.app.ui.component
+package com.project.app.ui.component.account
 
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView

@@ -4,8 +4,8 @@ import com.project.app.data.MaFileData
 import com.project.app.service.mafile.ImportFile
 import com.project.app.service.mafile.impl.DefaultImportFile
 import com.project.app.ui.component.BaseComponent
-import com.project.app.ui.component.LoadingComponent
-import com.project.app.ui.component.MessageComponent
+import com.project.app.ui.component.message.LoadingComponent
+import com.project.app.ui.component.message.MessageComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label

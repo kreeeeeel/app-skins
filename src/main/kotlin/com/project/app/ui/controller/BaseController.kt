@@ -3,8 +3,7 @@ package com.project.app.ui.controller
 import com.project.app.DESCRIPTION
 import com.project.app.Desktop
 import com.project.app.TITLE
-import com.project.app.task.Task
-import com.project.app.ui.component.TrayComponent
+import com.project.app.ui.component.tray.TrayComponent
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Cursor
@@ -16,11 +15,7 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import java.awt.SystemTray
-import java.awt.TrayIcon
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import javax.imageio.ImageIO
+import javafx.event.EventHandler
 
 
 const val WIDTH = 1200.0
@@ -107,6 +102,7 @@ open class BaseController: Application() {
 
         primaryStage?.let {
             it.scene = Scene(root, WIDTH, HEIGHT, Color.TRANSPARENT)
+            /* Event на передвежение сцены с зажатием мышки */
             it.scene.setOnMousePressed { event ->
                 offsetX = primaryStage.x - event.screenX
                 offsetY = primaryStage.y - event.screenY
@@ -118,8 +114,21 @@ open class BaseController: Application() {
             }
             it.scene.setOnMouseReleased { _ -> it.scene.cursor = Cursor.DEFAULT }
 
+            /* Event который используется при закрытии приложения из панели задач */
+            it.onCloseRequest = EventHandler { event ->
+                event.consume()
+
+                // Вызываем трей компонент
+                val trayComponent = TrayComponent()
+                trayComponent.init(root)
+
+                // Передвигаем сцены на передний экран
+                it.toFront()
+            }
+
             stage = it
 
+            // Через try инициализируем стиль и добавление иконки приложению
             try {
                 it.title = TITLE
                 it.initStyle(StageStyle.TRANSPARENT)
@@ -129,12 +138,14 @@ open class BaseController: Application() {
                 it.toFront()
             }
         }
-
-        val task = Task(taskText, taskIcon)
-        task.run()
     }
 
 
+    /**
+     * Отображает подсказку для задачи при наведении курсора мыши на указанную панель.
+     *
+     * @param taskPane Панель, на которой отображается подсказка для задачи.
+     */
     private fun showTaskHint(taskPane: Pane) = Platform.runLater {
         val pane = Pane().also {
             it.id = "task-hint"

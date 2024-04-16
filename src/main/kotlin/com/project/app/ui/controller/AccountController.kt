@@ -1,7 +1,7 @@
 package com.project.app.ui.controller
 
-import com.project.app.ui.component.AccountComponent
-import com.project.app.ui.component.FilterComponent
+import com.project.app.ui.component.account.AccountComponent
+import com.project.app.ui.component.account.FilterComponent
 import com.project.app.ui.component.auth.FileComponent
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
