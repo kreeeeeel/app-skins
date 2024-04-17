@@ -1,6 +1,7 @@
 package com.project.app.models
 
 import com.google.gson.GsonBuilder
+import com.project.app.data.type.BrowserType
 import com.project.app.service.logger.Logger
 import com.project.app.service.logger.impl.DefaultLogger
 import java.io.File
@@ -13,6 +14,7 @@ private const val FILE_CONFIG = "config.json"
 data class ConfigModel(
     var attemptRequest: Int = 3,
     var isEnabledTray: Boolean? = null,
+    var browserType: BrowserType = BrowserType.NONE
 ) {
 
     private val logger: Logger = DefaultLogger()
@@ -29,6 +31,7 @@ data class ConfigModel(
 
             attemptRequest = import.attemptRequest
             isEnabledTray = import.isEnabledTray
+            browserType = import.browserType
         } catch (ignored: Exception) {
             logger.error("Не удалось инициализировать конфигурацию. Загружен стандартный файл")
         }

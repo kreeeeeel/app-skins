@@ -1,7 +1,7 @@
 package com.project.app.service.steam.impl
 
 import com.project.app.client.api.Profile
-import com.project.app.client.interceptor.RandomUserAgentInterceptor
+import com.project.app.client.interceptor.ClientInterceptor
 import com.project.app.client.response.SteamProfileResponse
 import com.project.app.service.steam.SteamProfile
 import okhttp3.OkHttpClient
@@ -13,7 +13,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 class DefaultSteamProfile: SteamProfile {
 
     private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(RandomUserAgentInterceptor())
+        .addInterceptor(ClientInterceptor())
         .build()
 
     private val clientXml = Retrofit.Builder()

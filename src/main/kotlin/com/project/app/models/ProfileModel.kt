@@ -3,9 +3,10 @@ package com.project.app.models
 import java.math.BigDecimal
 
 data class ProfileModel(
-    val username: String,
-    val name: String,
-    val photo: String,
-    val password: String,
-    val inventory: BigDecimal = BigDecimal.ZERO
+    var username: String,
+    var name: String,
+    var photo: String,
+    var password: String,
+    var cookie: Map<String, String>,
+    var inventory: BigDecimal = BigDecimal.ZERO
 )

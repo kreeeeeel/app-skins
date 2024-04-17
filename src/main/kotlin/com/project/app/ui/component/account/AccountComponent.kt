@@ -2,6 +2,8 @@ package com.project.app.ui.component.account
 
 import com.project.app.models.ProfileModel
 import com.project.app.repository.ProfileRepository
+import com.project.app.service.driver.impl.DefaultDriver
+import com.project.app.ui.component.message.CenterComponent
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
 import javafx.scene.Cursor
@@ -10,6 +12,9 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.util.concurrent.CompletableFuture
 import kotlin.math.max
 
 private const val DEFAULT_HEIGHT = 536.0
@@ -17,7 +22,6 @@ private const val DEFAULT_HEIGHT = 536.0
 class AccountComponent(
     private val root: Pane
 ) {
-
     private var scroll: ScrollPane? = null
 
     fun initializeOrUpdate() {
@@ -88,47 +92,75 @@ class AccountComponent(
 
     private fun enterProfilePane(profilePane: Pane, profileModel: ProfileModel) = Platform.runLater {
 
+        val default = "Наведитесь, чтобы увидить действие"
         val pane = Pane().also {
             it.id = "mouse-entered-account"
         }
 
-        val text = Label("Намжите, чтобы открыть профиль в браузере").also {
+        val text = Label(default).also {
             it.id = "mouse-entered-text"
-            it.layoutX = 45.0
-            it.layoutY = 42.0
+            it.layoutX = 24.0
+            it.layoutY = 71.0
         }
 
-        val remove = Pane().also {
-            it.layoutX = 242.0
-            it.layoutY = 14.0
-            it.prefWidth = 24.0
-            it.prefHeight = 24.0
-            it.cursor = Cursor.HAND
-            it.opacity = 0.6
+        val browser = getEnterIcon("browser24x24").also { img -> img.layoutX = 62.0 }
+        val copy = getEnterIcon("copy24x24").also { img -> img.layoutX = 104.0 }
+        val guard = getEnterIcon("guard24x24").also { img -> img.layoutX = 148.0 }
+        val bag = getEnterIcon("bag24x24").also { img -> img.layoutX = 189.0 }
 
-            it.setOnMouseEntered { _ -> it.opacity = 1.0 }
-            it.setOnMouseExited { _ -> it.opacity = 0.6 }
+        browser.setOnMouseEntered { _ -> text.text = "Нажмите, чтобы авторизоваться в браузере" }
+        browser.setOnMouseExited { _ -> text.text = default }
+        browser.setOnMouseClicked {
 
-            ImageView().also { img ->
-                img.id = "close"
-                img.fitWidth = 24.0
-                img.fitHeight = 24.0
+            val center = CenterComponent("Браузер открывается!")
+            center.show(root)
 
-                it.children.add(img)
-            }
+            val name = profileModel.cookie.keys.elementAt(0)
+            val value = profileModel.cookie.values.elementAt(0)
+
+            CompletableFuture.supplyAsync { DefaultDriver().openBrowseProfile(name, value) }
         }
 
-        pane.children.addAll(text, remove)
+        copy.setOnMouseEntered { _ -> text.text = "Нажмите, чтобы скопировать логин:пароль" }
+        copy.setOnMouseExited { _ -> text.text = default }
+        copy.setOnMouseClicked { _ ->
 
-        profilePane.setOnMouseEntered { profilePane.children.add(pane) }
-        profilePane.setOnMouseExited { profilePane.children.removeIf { it.id == "mouse-entered-account" } }
+            val center = CenterComponent("Логин и пароль скопированы!")
+            center.show(root)
 
-        remove.setOnMouseClicked {
+            val stringSelection = StringSelection(String.format("%s:%s", profileModel.username, profileModel.password))
+            val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+            clipboard.setContents(stringSelection, null)
+        }
+
+        guard.setOnMouseEntered { _ -> text.text = "Нажмите, чтобы скопировать Steam Guard" }
+        guard.setOnMouseExited { _ -> text.text = default }
+        guard.setOnMouseClicked { _ ->
+
+            val center = CenterComponent("Код Steam Guard скопирован!")
+            center.show(root)
+
+            val label = profilePane.children.last { it.id == "account-first" } as Label
+
+            val stringSelection = StringSelection(label.text)
+            val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+            clipboard.setContents(stringSelection, null)
+        }
+
+        bag.setOnMouseEntered { _ -> text.text = "Нажмите, чтобы удалить аккаунт" }
+        bag.setOnMouseExited { _ -> text.text = default }
+        bag.setOnMouseClicked {
             val dropAccountComponent = DropAccountComponent()
             dropAccountComponent.setProfile(profileModel)
             dropAccountComponent.init(root)
             dropAccountComponent.animate()
         }
+
+
+        pane.children.addAll(text, browser, copy, guard, bag)
+
+        profilePane.setOnMouseEntered { profilePane.children.add(pane) }
+        profilePane.setOnMouseExited { profilePane.children.removeIf { it.id == "mouse-entered-account" } }
     }
 
     private fun getScrollPane() = ScrollPane().also {
@@ -140,6 +172,21 @@ class AccountComponent(
             ap.prefWidth = 1183.0
             ap.prefHeight = DEFAULT_HEIGHT
         }
+    }
+
+    private fun getEnterIcon(id: String) = Pane().also {
+        it.layoutY = 32.0
+        it.prefWidth = 24.0
+        it.prefHeight = 24.0
+        it.cursor = Cursor.HAND
+
+        val img = ImageView().also { img ->
+            img.id = id
+            img.fitWidth = 24.0
+            img.fitHeight = 24.0
+        }
+
+        it.children.add(img)
     }
 
 }

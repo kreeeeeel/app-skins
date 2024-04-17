@@ -5,6 +5,7 @@ import com.project.app.data.MaFileData
 import com.project.app.data.PasswordFile
 import com.project.app.data.ValidData
 import com.project.app.data.SteamProperty
+import com.project.app.repository.MaFileRepository
 import com.project.app.service.logger.Logger
 import com.project.app.service.logger.impl.DefaultLogger
 import com.project.app.service.mafile.ImportFile
@@ -14,6 +15,7 @@ import java.io.FileReader
 class DefaultImportFile: ImportFile {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
+    private val maFileRepository = MaFileRepository()
     private val logger: Logger = DefaultLogger()
 
     override fun import(files: List<File>): MaFileData {
@@ -39,6 +41,7 @@ class DefaultImportFile: ImportFile {
                 )
                 properties.add(validData)
                 logger.info("Файл ${file.name} валиден, полученный аккаунт ${validData.username}.")
+                maFileRepository.save(property)
 
             } else {
 

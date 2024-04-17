@@ -78,15 +78,29 @@ class TrayComponent: BaseComponent() {
 
     override fun init(root: Pane) {
 
-        close.setOnMouseClicked { actionOnButton(root, true) }
-        collapse.setOnMouseClicked { actionOnButton(root, false) }
+        var isOpenedTray = false
 
-        if (configModel.isEnabledTray != null) inTrayOrClose(root.scene.window as Stage)
-        else {
-            pane.children.add(block)
-            super.init(root)
+        val node = root.children.firstOrNull { it.id == "background" }
+        if (node != null) {
+
+            val trayPane = node as Pane
+            val trayBlock = trayPane.children.firstOrNull { it.id == "block-tray" }
+
+            isOpenedTray = trayBlock != null
+
         }
 
+        if (!isOpenedTray) {
+
+            close.setOnMouseClicked { actionOnButton(root, true) }
+            collapse.setOnMouseClicked { actionOnButton(root, false) }
+
+            if (configModel.isEnabledTray != null) inTrayOrClose(root.scene.window as Stage)
+            else {
+                pane.children.add(block)
+                super.init(root)
+            }
+        }
     }
 
     private fun actionOnButton(root: Pane, isClose: Boolean) {

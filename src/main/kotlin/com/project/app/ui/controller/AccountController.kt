@@ -1,12 +1,13 @@
 package com.project.app.ui.controller
 
 import com.project.app.ui.component.account.AccountComponent
-import com.project.app.ui.component.account.FilterComponent
+import com.project.app.ui.component.account.GuardUpdateCode
 import com.project.app.ui.component.auth.FileComponent
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
+import java.util.Timer
 
 class AccountController: BaseController() {
 
@@ -44,8 +45,7 @@ class AccountController: BaseController() {
         val accountComponent = AccountComponent(root)
         accountComponent.initializeOrUpdate()
 
-        val filterComponent = FilterComponent()
-        filterComponent.initialize(root)
+        Timer().scheduleAtFixedRate(GuardUpdateCode(root), 1000, 1000)
 
         super.start(primaryStage)
     }

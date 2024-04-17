@@ -1,63 +1,78 @@
 package com.project.app.service.steam.impl
 
-import com.google.gson.GsonBuilder
-import com.project.app.client.api.TwoFactorService
 import com.project.app.service.steam.SteamGuard
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.nio.ByteBuffer
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-private const val SYMBOLS = "23456789BCDFGHJKMNPQRTVWXY"
+private val chars = charArrayOf(
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'B',
+    'C',
+    'D',
+    'F',
+    'G',
+    'H',
+    'J',
+    'K',
+    'M',
+    'N',
+    'P',
+    'Q',
+    'R',
+    'T',
+    'V',
+    'W',
+    'X',
+    'Y'
+)
 
 class DefaultSteamGuard: SteamGuard {
 
-    private val client = Retrofit.Builder()
-        .baseUrl("https://api.steampowered.com/ITwoFactorService/")
-        .addConverterFactory(
-            GsonConverterFactory.create(
-                GsonBuilder()
-                    .setLenient()
-                    .create()
-            )
-        ).build()
-
-    private val steamTimeApi: TwoFactorService = client.create(TwoFactorService::class.java)
-
     override fun getCode(sharedSecret: String): String {
-        val timestamp = System.currentTimeMillis() / 1000 + getQueryTime()
-        val hmac = hmacSha1(sharedSecret, timestamp / 30)
-        val ord = hmac[19].toInt() and 0xF
-        val value = ByteBuffer.wrap(hmac.copyOfRange(ord, ord + 4)).int and 0x7FFFFFFF
-        val codeBuilder = StringBuilder()
-        var tempValue = value
-        repeat(5) {
-            val symbolIndex = tempValue % SYMBOLS.length
-            codeBuilder.append(SYMBOLS[symbolIndex])
-            tempValue /= SYMBOLS.length
+        val timestamp = (System.currentTimeMillis() / 1000).toInt() / 30
+        val array: ByteArray = timeToUint64(timestamp)
+        val keyBytes = Base64.getDecoder().decode(sharedSecret)
+        val signingKey = SecretKeySpec(keyBytes, "HmacSHA1")
+
+        val mac = Mac.getInstance("HmacSHA1")
+        mac.init(signingKey)
+
+        val rawHmac = mac.doFinal(array)
+        val begin = rawHmac[19].toInt() and 0xf
+        val newArray = Arrays.copyOfRange(rawHmac, begin, begin + 4)
+        var fullCode: Long = fromArrayToLong(newArray) and 0x7fffffff
+        val code = StringBuilder()
+        for (i in 0..4) {
+            val div = (fullCode / chars.size).toInt()
+            val mod = (fullCode % chars.size).toInt()
+            code.append(chars[mod])
+            fullCode = div.toLong()
         }
-        return codeBuilder.toString()
+        return code.toString()
     }
 
-    private fun getQueryTime(): Long {
-        return steamTimeApi.getTime().execute().body()?.serverTime?.toLong() ?: return 0
+    private fun fromArrayToLong(array: ByteArray): Long {
+        var res: Long = 0
+        res = res or ((array[0].toInt() and 0xff).toLong() shl 24)
+        res = res or ((array[1].toInt() and 0xff).toLong() shl 16)
+        res = res or ((array[2].toInt() and 0xff).toLong() shl 8)
+        res = res or (array[3].toInt() and 0xff).toLong()
+        return res
     }
 
-    private fun hmacSha1(key: String, value: Long): ByteArray {
-        val mac: Mac
-        try {
-            mac = Mac.getInstance("HmacSHA1")
-            val secretKey = SecretKeySpec(Base64.getDecoder().decode(key), "HmacSHA1")
-            mac.init(secretKey)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to create HMAC-SHA1 instance", e)
-        } catch (e: InvalidKeyException) {
-            throw RuntimeException("Invalid key for HMAC-SHA1", e)
+    private fun timeToUint64(timestamp: Int): ByteArray {
+        val res = ByteArray(8)
+        for (i in 4..7) {
+            res[i] = (timestamp shr 24 - 8 * (i - 4) and 0xff).toByte()
         }
-        return mac.doFinal(ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(value).array())
+        return res
     }
 }

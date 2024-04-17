@@ -113,12 +113,17 @@ class SteamComponent(
         if (steamModel.isLoggedIn) {
 
             val response = steamProfile.getProfileData(steamModel.steamId!!) ?: return false
+            val cookie = steamModel.steamCookie!!.split("=")
+
+            val name = cookie[0]
+            val value = cookie[1]
 
             val profile = ProfileModel(
                 username = data.username,
                 name = response.name,
                 photo = response.avatar,
-                password = data.password!!
+                password = data.password!!,
+                cookie = mapOf(name to value)
             )
             return profileRepository.save(profile)
         }

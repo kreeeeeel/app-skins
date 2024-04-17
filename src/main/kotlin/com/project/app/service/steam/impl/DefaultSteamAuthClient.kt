@@ -10,6 +10,8 @@ import com.project.app.client.response.TransferResponse
 import com.project.app.service.encrypto.PasswordEncryptor
 import com.project.app.service.encrypto.impl.DefaultPasswordEncryptor
 import com.project.app.data.RSAParam
+import com.project.app.service.logger.Logger
+import com.project.app.service.logger.impl.DefaultLogger
 import com.project.app.service.steam.SteamAuthClient
 import com.project.app.service.steam.SteamGuard
 import retrofit2.Retrofit
@@ -47,11 +49,20 @@ class DefaultSteamAuthClient: SteamAuthClient {
     private val passwordEncryptor: PasswordEncryptor = DefaultPasswordEncryptor()
     private val steamGuard: SteamGuard = DefaultSteamGuard()
 
+    private val logger: Logger = DefaultLogger()
+
     override fun fetchRSAParam(username: String): RSAParam? {
         val response = steamAuthApi.getRSAPublicKey(username = username)
             .execute()
 
-        val body = response.body()?.response ?: return null
+        logger.info("Запрос на получение RSA Ключа аккаунта: $username")
+        val body = response.body()?.response
+        if (body == null) {
+            logger.error("Не удалось выполнить запрос для получение RSA ключа: $username")
+            return null
+        }
+
+        logger.info("Запрос на получение RSA Ключа прошел успешно!")
         return RSAParam(
             RSAPublicKeySpec(
                 BigInteger(body.publickeyMod, 16),

@@ -302,17 +302,29 @@
     -fx-pref-height: 120px;
 }
 
-#mouse-entered-account:hover {
-    -fx-cursor: OPEN_HAND;
-}
-
 #mouse-entered-text {
     -fx-wrap-text: true;
     -fx-text-alignment: CENTER;
-    -fx-alignment: CENTER;
-    -fx-pref-width: 190px;
+    -fx-alignment: TOP-CENTER;
+    -fx-pref-width: 232px;
     -fx-font-size: 14px;
     -fx-text-fill: #d3d2d2;
+}
+
+#browser24x24 {
+    -fx-image: url("files/browser24x24.png");
+}
+
+#copy24x24 {
+    -fx-image: url("files/copy24x24.png");
+}
+
+#guard24x24 {
+    -fx-image: url("files/guard24x24.png");
+}
+
+#bag24x24 {
+    -fx-image: url("files/bag24x24.png");
 }
 
 #404 {
@@ -714,14 +726,37 @@
     -fx-background-color: #003365;
 }
 
-#date {
-    -fx-image: url("files/date.png");
+#filterChoose {
+    -fx-font-size: 14px;
+    -fx-text-fill: #807e7e;
 }
 
-#login {
-    -fx-image: url("files/login.png");
+#guardComponent {
+    -fx-background-color: #3a5167;
+    -fx-background-radius: 16px;
+    -fx-pref-width: 340px;
+    -fx-pref-height: 35px;
 }
 
-#calculate {
-    -fx-image: url("files/calculate.png");
+#guardImg {
+    -fx-image: url("files/guard.png");
+}
+
+#guardLabel {
+    -fx-font-size: 15px;
+    -fx-text-fill: #e4e4e4;
+}
+
+#centerMessage {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-radius: 8px;
+    -fx-pref-width: 340px;
+    -fx-pref-height: 42px;
+}
+
+#centerMessageText {
+    -fx-font-size: 17px;
+    -fx-text-fill: #e4e4e4;
+    -fx-pref-width: 320px;
+    -fx-alignment: center;
 }

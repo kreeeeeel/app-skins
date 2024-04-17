@@ -5,7 +5,9 @@ import okhttp3.Response
 import java.io.FileReader
 import java.util.*
 
-class RandomUserAgentInterceptor: Interceptor {
+class ClientInterceptor(
+    private val cookie: String? = null
+): Interceptor {
 
     private val userAgents = FileReader("user-agents.txt")
         .use { it.readLines() }
@@ -13,6 +15,10 @@ class RandomUserAgentInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder().also {
             it.addHeader("User-Agent", getRandomUserAgent())
+
+            if (cookie != null) {
+                it.addHeader("Cookie", cookie)
+            }
         }.build()
 
         return chain.proceed(request)
