@@ -47,6 +47,7 @@ javafx {
 }
 
 dependencies {
+  implementation("org.telegram:telegrambots:6.7.0")
   implementation("org.seleniumhq.selenium:selenium-java:4.19.1")
   implementation("io.github.bonigarcia:webdrivermanager:5.8.0")
   implementation("com.squareup.retrofit2:retrofit:2.11.0")

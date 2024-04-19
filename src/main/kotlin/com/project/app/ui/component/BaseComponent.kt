@@ -16,7 +16,7 @@ open class BaseComponent {
         it.prefHeight = HEIGHT
     }
 
-    private val close = getFooterRight(true).also {
+    private val close = getFooterRight("close").also {
         it.layoutX = 1110.0
         it.layoutY = 42.0
 

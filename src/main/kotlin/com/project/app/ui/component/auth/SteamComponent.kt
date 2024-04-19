@@ -26,7 +26,7 @@ class SteamComponent(
 ) {
 
     private var currentAttempt: Int = 1
-    private val config = ConfigModel()
+    private val config = ConfigModel().init()
 
     private val pane = Pane().also{
         it.id = "background"

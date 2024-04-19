@@ -748,7 +748,7 @@
 }
 
 #centerMessage {
-    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-color: #4db077;
     -fx-background-radius: 8px;
     -fx-pref-width: 340px;
     -fx-pref-height: 42px;
@@ -756,7 +756,70 @@
 
 #centerMessageText {
     -fx-font-size: 17px;
-    -fx-text-fill: #e4e4e4;
+    -fx-text-fill: #ffffff;
     -fx-pref-width: 320px;
     -fx-alignment: center;
+}
+
+#settingsComponent {
+    -fx-pref-width: 315px;
+    -fx-pref-height: 600px;
+    -fx-background-color: #2a2d33;
+    -fx-background-radius: 16px;
+}
+
+#settingsBlock {
+    -fx-pref-width: 280px;
+    -fx-background-color: #1f2227;
+    -fx-background-radius: 8px;
+}
+
+#settings {
+    -fx-image: url("files/settings.png");
+}
+
+#settingsBlockText {
+    -fx-font-size: 16px;
+    -fx-text-fill: #e1e1e1;
+}
+
+#telegram {
+    -fx-image: url("files/telegram.png");
+}
+
+#telegramTokenText {
+    -fx-pref-width: 250px;
+    -fx-wrap-text: true;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-text-fill: #838383;
+}
+
+#telegramConfirmText {
+    -fx-pref-width: 243px;
+    -fx-wrap-text: true;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-text-fill: #838383;
+}
+
+#telegramCopy {
+    -fx-image: url("files/copy48x48.png");
+}
+
+#telegramConfirmCode {
+    -fx-font-size: 31px;
+    -fx-text-fill: #e8e8e8;
+}
+
+#telegramConfirmCode:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #a1a1a1;
+}
+
+#telegramConfirmCodeText {
+    -fx-font-size: 14px;
+    -fx-text-fill: #838383;
 }

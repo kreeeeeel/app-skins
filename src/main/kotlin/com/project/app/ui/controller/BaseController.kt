@@ -3,6 +3,7 @@ package com.project.app.ui.controller
 import com.project.app.DESCRIPTION
 import com.project.app.Desktop
 import com.project.app.TITLE
+import com.project.app.ui.component.settings.SettingsComponent
 import com.project.app.ui.component.tray.TrayComponent
 import javafx.application.Application
 import javafx.application.Platform
@@ -85,8 +86,9 @@ open class BaseController: Application() {
         task.children.add(it)
     }
 
-    private val collapse = getFooterRight(false)
-    private val close = getFooterRight(true)
+    private val collapse = getFooterRight("collapse").also { it.layoutX = 1090.0 }
+    private val settings = getFooterRight("settings").also { it.layoutX = 1044.0 }
+    private val close = getFooterRight("close").also { it.layoutX = 1136.0 }
 
     private var offsetX: Double = 0.0
     private var offsetY: Double = 0.0
@@ -97,8 +99,13 @@ open class BaseController: Application() {
 
         close.setOnMouseClicked { TrayComponent().init(root) }
         collapse.setOnMouseClicked { primaryStage?.isIconified = true }
+        settings.setOnMouseClicked {
+            val settingsComponent = SettingsComponent()
+            settingsComponent.init(root)
+            settingsComponent.animate()
+        }
 
-        root.children.addAll(task, close, collapse)
+        root.children.addAll(task, close, collapse, settings)
 
         primaryStage?.let {
             it.scene = Scene(root, WIDTH, HEIGHT, Color.TRANSPARENT)
@@ -167,8 +174,7 @@ open class BaseController: Application() {
 
     companion object {
 
-        fun getFooterRight(isClose: Boolean): Pane = Pane().also {
-            it.layoutX = if (isClose) 1136.0 else 1090.0
+        fun getFooterRight(id: String): Pane = Pane().also {
             it.layoutY = 22.0
             it.prefWidth = 34.0
             it.prefHeight = 34.0
@@ -179,7 +185,7 @@ open class BaseController: Application() {
             it.setOnMouseExited { _ -> it.opacity = 0.6 }
 
             ImageView().also { img ->
-                img.id = if (isClose) "close" else "collapse"
+                img.id = id
                 img.fitWidth = 34.0
                 img.fitHeight = 34.0
 

@@ -11,16 +11,37 @@ import java.nio.charset.StandardCharsets
 
 private const val FILE_CONFIG = "config.json"
 
+data class Telegram(
+    var isConnected: Boolean = false,
+    var isWaiting: Boolean = false,
+    var bot: TelegramBot? = null,
+    var user: TelegramUser? = null,
+)
+
+data class TelegramBot(
+    var token: String? = null,
+    var name: String? = null,
+    var code: String? = null,
+)
+
+data class TelegramUser(
+    var name: String? = null,
+    var username: String? = null,
+    var photo: String? = null,
+    var chatId: String? = null,
+)
+
 data class ConfigModel(
     var attemptRequest: Int = 3,
     var isEnabledTray: Boolean? = null,
-    var browserType: BrowserType = BrowserType.NONE
+    var browserType: BrowserType = BrowserType.NONE,
+    var telegram: Telegram? = null
 ) {
 
-    private val logger: Logger = DefaultLogger()
-    private val gson = GsonBuilder().setPrettyPrinting().create()
+    @Transient private val logger: Logger = DefaultLogger()
+    @Transient private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    init {
+    fun init(): ConfigModel {
         try {
             val file = File(FILE_CONFIG)
             if (!file.exists() && file.createNewFile()) {
@@ -32,9 +53,12 @@ data class ConfigModel(
             attemptRequest = import.attemptRequest
             isEnabledTray = import.isEnabledTray
             browserType = import.browserType
+            telegram = import.telegram
         } catch (ignored: Exception) {
             logger.error("Не удалось инициализировать конфигурацию. Загружен стандартный файл")
         }
+
+        return this
     }
 
     fun save() {

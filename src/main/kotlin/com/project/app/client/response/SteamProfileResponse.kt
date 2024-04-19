@@ -7,4 +7,5 @@ import org.simpleframework.xml.Root
 data class SteamProfileResponse(
     @field:Element(name = "avatarFull") var avatar: String = "",
     @field:Element(name = "steamID") var name: String = "",
+    @field:Element(name = "isLimitedAccount") var isLimitedAccount: String = ""
 )

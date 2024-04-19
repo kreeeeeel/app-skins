@@ -74,7 +74,7 @@ class TrayComponent: BaseComponent() {
     }
 
 
-    private val configModel = ConfigModel()
+    private val configModel = ConfigModel().init()
 
     override fun init(root: Pane) {
 
