@@ -8,7 +8,7 @@ import com.project.app.repository.ProfileRepository
 import com.project.app.service.steam.SteamProfile
 import com.project.app.service.steam.impl.DefaultSteamProfile
 import com.project.app.ui.component.account.AccountComponent
-import com.project.app.ui.component.message.MessageComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import com.project.app.ui.controller.HEIGHT
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
@@ -133,23 +133,24 @@ class SteamComponent(
 
     private fun finalizeAuth(users: List<String>) {
 
-        val component = MessageComponent()
         Platform.runLater {
 
             timer.cancel()
             root.children.remove(pane)
 
-            if (users.isEmpty()) {
-                component.drawSuccessMessage("Авторизация в аккаунты прошла успешно!")
-            } else if (users.size == validData.size) {
-                component.drawErrorMessage("Не удалось войти во все аккаунты!!")
-            } else {
+            val accountComponent = AccountComponent()
+            val notifyComponent = NotifyComponent()
+
+            if (users.size == validData.size) {
+                notifyComponent.failure("Ни в один аккаунт не удалось войти! Проверьте валидность данных и попробуйте еще раз!")
+            } else if (users.isNotEmpty()) {
                 val invalidAuthComponent = InvalidAuthComponent(validData.size, validData.size - users.size, users)
                 invalidAuthComponent.init()
+                accountComponent.initializeOrUpdate()
+            } else {
+                notifyComponent.success("Авторизация в аккаунты прошла успешно, теперь вы можете с ними взаимодействовать в приложении!")
+                accountComponent.initializeOrUpdate()
             }
-
-            val accounts = AccountComponent()
-            accounts.initializeOrUpdate()
         }
 
     }

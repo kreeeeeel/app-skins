@@ -5,7 +5,7 @@ import com.project.app.service.mafile.ImportFile
 import com.project.app.service.mafile.impl.DefaultImportFile
 import com.project.app.ui.component.BaseComponent
 import com.project.app.ui.component.message.LoadingComponent
-import com.project.app.ui.component.message.MessageComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -185,8 +185,8 @@ class PasswordComponent(
 
             Platform.runLater {
                 if (result.users.isEmpty()) {
-                    val message = MessageComponent()
-                    message.drawErrorMessage("В этом файле небыло найдено паролей..")
+                    val notifyComponent = NotifyComponent()
+                    notifyComponent.failure("В этом файле небыло найдено паролей, укажите файл в котором будут находится пароли")
 
                     loading.clear()
 

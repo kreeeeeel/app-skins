@@ -3,6 +3,7 @@ package com.project.app.ui.component.auth
 import com.project.app.service.mafile.ImportFile
 import com.project.app.service.mafile.impl.DefaultImportFile
 import com.project.app.ui.component.BaseComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -134,10 +135,15 @@ class FileComponent: BaseComponent() {
         CompletableFuture.supplyAsync {
             val importFile: ImportFile = DefaultImportFile()
             val import = importFile.import(files)
+            val notifyComponent = NotifyComponent()
 
             Platform.runLater {
-                root.children.remove(pane)
-                PasswordComponent(import).init()
+                if (import.data.isEmpty()) {
+                    notifyComponent.failure("Не было найдено .maFile, проверьте файлы которые указываете...")
+                } else {
+                    root.children.remove(pane)
+                    PasswordComponent(import).init()
+                }
             }
         }
     }

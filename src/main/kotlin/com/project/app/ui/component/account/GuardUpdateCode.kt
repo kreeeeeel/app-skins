@@ -12,7 +12,7 @@ import java.util.TimerTask
 import com.project.app.ui.controller.BaseController.Companion.root
 
 private const val TEXT = "Обновление Steam кодов через %02d сек."
-private const val TIME_LIVE_GUARD = 25
+private const val TIME_LIVE_GUARD = 30
 
 class GuardUpdateCode: TimerTask() {
 

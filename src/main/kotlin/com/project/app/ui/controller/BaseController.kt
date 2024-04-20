@@ -7,6 +7,7 @@ import com.project.app.ui.component.settings.SettingsComponent
 import com.project.app.ui.component.tray.TrayComponent
 import javafx.application.Application
 import javafx.application.Platform
+import javafx.event.EventHandler
 import javafx.scene.Cursor
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -16,7 +17,6 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import javafx.event.EventHandler
 
 
 const val WIDTH = 1200.0

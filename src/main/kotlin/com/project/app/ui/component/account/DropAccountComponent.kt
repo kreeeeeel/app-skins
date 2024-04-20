@@ -3,7 +3,7 @@ package com.project.app.ui.component.account
 import com.project.app.models.ProfileModel
 import com.project.app.repository.ProfileRepository
 import com.project.app.ui.component.BaseComponent
-import com.project.app.ui.component.message.MessageComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -58,17 +58,17 @@ class DropAccountComponent: BaseComponent() {
 
     private fun dropAccount(profileModel: ProfileModel) {
         val profileRepository = ProfileRepository()
-        val messageComponent = MessageComponent()
+        val notifyComponent = NotifyComponent()
 
         if (!profileRepository.remove(profileModel)) {
-            messageComponent.drawErrorMessage("Не удалось удалить аккаунт..")
-
+            notifyComponent.failure("Не получилось удалить аккаунт, возможно он уже удален!")
         } else {
 
             root.children.remove(pane)
-            val accountComponent = AccountComponent()
 
-            messageComponent.drawSuccessMessage("Аккаунт был успешно удален!")
+            notifyComponent.success("Аккаунт был успешно удален из вашего списка!")
+
+            val accountComponent = AccountComponent()
             accountComponent.initializeOrUpdate()
         }
     }

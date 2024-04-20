@@ -8,7 +8,7 @@ import com.project.app.service.logger.impl.DefaultLogger
 import com.project.app.service.telegram.BotInitialize
 import com.project.app.ui.component.message.CenterComponent
 import com.project.app.ui.component.message.LoadingComponent
-import com.project.app.ui.component.message.MessageComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import com.project.app.ui.component.settings.SettingBlock
 import com.project.app.ui.component.settings.SettingsComponent
 import com.project.app.ui.controller.BaseController.Companion.getFooterRight
@@ -266,8 +266,8 @@ class TelegramBlock(
                     BotInitialize.init(token, botName)
 
                     if (BotInitialize.telegramBot == null || !BotInitialize.telegramBot?.isConnected!!) {
-                        val component = MessageComponent()
-                        component.drawErrorMessage("Не удалось запустить телеграм бота, проверьте валидность данных")
+                        val component = NotifyComponent()
+                        component.failure("Не удалось запустить телеграм бота, проверьте валидность данных")
                     } else {
 
                         config.telegram = Telegram()

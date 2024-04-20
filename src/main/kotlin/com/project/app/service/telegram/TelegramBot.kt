@@ -2,7 +2,7 @@ package com.project.app.service.telegram
 
 import com.project.app.models.ConfigModel
 import com.project.app.models.TelegramUser
-import com.project.app.ui.component.message.MessageComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import com.project.app.ui.component.settings.SettingsComponent
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.GetFile
@@ -57,7 +57,9 @@ class TelegramBot(
                     config.save()
 
                     SettingsComponent().refresh()
-                    MessageComponent().drawSuccessMessage("Вы успешно авторизовались в телеграмм, в телеграм будут приходить различные уведомления!")
+
+                    val notifyComponent = NotifyComponent()
+                    notifyComponent.success("Телеграм был успешно подключен, теперь вам будут приходить различные уведомления, информативные и ожидающие вашего подтверждения!")
 
                     reply(message.chatId, message.messageId, "Вы успешно авторизовались в приложении!")
                 }
