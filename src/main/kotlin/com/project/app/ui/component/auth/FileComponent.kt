@@ -13,7 +13,7 @@ import javafx.stage.FileChooser
 import javafx.stage.Stage
 import java.io.File
 import java.util.concurrent.CompletableFuture
-
+import com.project.app.ui.controller.BaseController.Companion.root
 
 private const val HINT_TEXT = "Загрузите файлы .maFile. После загрузки, появится окно с указанием пароля."
 
@@ -87,7 +87,7 @@ class FileComponent: BaseComponent() {
         field.children.add(it)
     }
 
-    override fun init(root: Pane) = Platform.runLater {
+    override fun init() = Platform.runLater {
         field.setOnDragOver { event ->
             if (event.dragboard.hasFiles()) {
                 event.acceptTransferModes(TransferMode.COPY)
@@ -114,7 +114,7 @@ class FileComponent: BaseComponent() {
         }
         button.setOnMouseClicked { showOpenDialog() }
 
-        super.init(root)
+        super.init()
     }
 
     private fun showOpenDialog() {
@@ -131,15 +131,13 @@ class FileComponent: BaseComponent() {
     }
 
     private fun handeImport(files: List<File>) {
-        val root = pane.parent as Pane
-
         CompletableFuture.supplyAsync {
             val importFile: ImportFile = DefaultImportFile()
             val import = importFile.import(files)
 
             Platform.runLater {
                 root.children.remove(pane)
-                PasswordComponent(import).init(root)
+                PasswordComponent(import).init()
             }
         }
     }

@@ -3,6 +3,7 @@ package com.project.app.ui.component.settings
 import com.project.app.models.ConfigModel
 import com.project.app.ui.component.BaseComponent
 import com.project.app.ui.component.settings.block.TelegramBlock
+import com.project.app.ui.controller.BaseController.Companion.root
 import javafx.application.Platform
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.AnchorPane
@@ -37,8 +38,6 @@ class SettingsComponent: BaseComponent() {
         TelegramBlock(config),
     )
 
-    lateinit var root: Pane
-
     fun refresh() {
         val pane = root.children.firstOrNull { it.id == "background" } ?: return
         val settings = (pane as Pane).children.firstOrNull { it.id == main.id } ?: return
@@ -51,13 +50,12 @@ class SettingsComponent: BaseComponent() {
         }
     }
 
-    override fun init(root: Pane) {
+    override fun init() {
 
-        this.root = root
         val content = scroll.content as AnchorPane
 
         draw(content)
-        super.init(root)
+        super.init()
     }
 
     private fun draw(content: AnchorPane) {
@@ -66,7 +64,7 @@ class SettingsComponent: BaseComponent() {
             content.children.add(it.block)
 
             it.block.layoutY = lastPosY
-            lastPosY += it.init(root)
+            lastPosY += it.init()
         }
 
         content.prefHeight = lastPosY

@@ -54,7 +54,7 @@ class InvalidPasswordComponent(
                     .map { f -> f.value }
                     .toList()
 
-                SteamComponent(valid).start(pane.parent as Pane)
+                SteamComponent(valid).start()
             }
         }
 
@@ -81,9 +81,9 @@ class InvalidPasswordComponent(
         field.children.add(it)
     }
 
-    override fun init(root: Pane) {
+    override fun init() {
         initScroll()
-        super.init(root)
+        super.init()
     }
 
     private fun initScroll() {

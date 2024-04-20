@@ -32,34 +32,6 @@ private val HINT_TASK = """
 
 open class BaseController: Application() {
 
-    val root = Pane().also {
-        it.prefWidth = WIDTH
-        it.prefHeight = HEIGHT
-
-        val logo = ImageView().also { img ->
-            img.id = "logo"
-            img.layoutX = 28.0
-            img.layoutY = 21.0
-            img.fitWidth = 48.0
-            img.fitHeight = 48.0
-        }
-
-        val title = Label(TITLE).also { l ->
-            l.id = "title"
-            l.layoutX = 82.0
-            l.layoutY = 30.0
-        }
-
-        val description = Label(DESCRIPTION).also { l ->
-            l.id = "description"
-            l.layoutX = 82.0
-            l.layoutY = 47.0
-        }
-
-        it.children.addAll(logo, title, description)
-        it.stylesheets.add(Desktop::class.java.getResource("style.css")!!.toString())
-    }
-
     private val task = Pane().also {
         it.id = "task"
         it.layoutX = 400.0
@@ -97,11 +69,11 @@ open class BaseController: Application() {
 
     override fun start(primaryStage: Stage?) {
 
-        close.setOnMouseClicked { TrayComponent().init(root) }
+        close.setOnMouseClicked { TrayComponent().init() }
         collapse.setOnMouseClicked { primaryStage?.isIconified = true }
         settings.setOnMouseClicked {
             val settingsComponent = SettingsComponent()
-            settingsComponent.init(root)
+            settingsComponent.init()
             settingsComponent.animate()
         }
 
@@ -127,7 +99,7 @@ open class BaseController: Application() {
 
                 // Вызываем трей компонент
                 val trayComponent = TrayComponent()
-                trayComponent.init(root)
+                trayComponent.init()
 
                 // Передвигаем сцены на передний экран
                 it.toFront()
@@ -173,6 +145,34 @@ open class BaseController: Application() {
     }
 
     companion object {
+
+        val root = Pane().also {
+            it.prefWidth = WIDTH
+            it.prefHeight = HEIGHT
+
+            val logo = ImageView().also { img ->
+                img.id = "logo"
+                img.layoutX = 28.0
+                img.layoutY = 21.0
+                img.fitWidth = 48.0
+                img.fitHeight = 48.0
+            }
+
+            val title = Label(TITLE).also { l ->
+                l.id = "title"
+                l.layoutX = 82.0
+                l.layoutY = 30.0
+            }
+
+            val description = Label(DESCRIPTION).also { l ->
+                l.id = "description"
+                l.layoutX = 82.0
+                l.layoutY = 47.0
+            }
+
+            it.children.addAll(logo, title, description)
+            it.stylesheets.add(Desktop::class.java.getResource("style.css")!!.toString())
+        }
 
         fun getFooterRight(id: String): Pane = Pane().also {
             it.layoutY = 22.0

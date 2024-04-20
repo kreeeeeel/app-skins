@@ -159,11 +159,11 @@ class KeyboardPasswordComponent(
         pane.children.add(it)
     }
 
-    override fun init(root: Pane) = Platform.runLater {
+    override fun init() = Platform.runLater {
         block.children.addAll(username, textField, button)
         pane.children.add(block)
 
-        super.init(root)
+        super.init()
     }
 
     private fun savePassword() {
@@ -173,7 +173,7 @@ class KeyboardPasswordComponent(
 
             validData[current++].password = password
             if (current == validData.size) {
-                SteamComponent(validData).start(pane.parent as Pane)
+                SteamComponent(validData).start()
             } else {
                 refreshUi()
             }

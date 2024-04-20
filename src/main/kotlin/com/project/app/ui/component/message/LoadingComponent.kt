@@ -6,10 +6,9 @@ import javafx.application.Platform
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
+import com.project.app.ui.controller.BaseController.Companion.root
 
-class LoadingComponent(
-    private val root: Pane
-) {
+class LoadingComponent {
 
     private val pane = Pane().also{
         it.id = "background"

@@ -11,11 +11,9 @@ abstract class SettingBlock(
     val config: ConfigModel
 ) {
 
-    lateinit var root: Pane
-
     val block = Pane().also {
         it.id = "settingsBlock"
-        it.layoutX = 15.0
+        it.layoutX = 17.0
 
         val icon = ImageView().also{ img ->
             img.id = id
@@ -34,6 +32,6 @@ abstract class SettingBlock(
         it.children.addAll(icon, text)
     }
 
-    abstract fun init(root: Pane): Double
+    abstract fun init(): Double
 
 }

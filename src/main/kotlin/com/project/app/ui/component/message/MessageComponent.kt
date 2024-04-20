@@ -1,5 +1,6 @@
 package com.project.app.ui.component.message
 
+import com.project.app.ui.controller.BaseController.Companion.root
 import com.project.app.ui.controller.HEIGHT
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
@@ -8,9 +9,8 @@ import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 
-class MessageComponent(
-    private val root: Pane
-) {
+
+class MessageComponent {
 
     private val pane = Pane().also {
         it.id = "background"

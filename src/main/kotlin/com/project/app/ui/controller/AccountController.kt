@@ -38,14 +38,14 @@ class AccountController: BaseController() {
 
         accountPlus.setOnMouseClicked {
             val fileComponent = FileComponent()
-            fileComponent.init(root)
+            fileComponent.init()
             fileComponent.animate()
         }
 
-        val accountComponent = AccountComponent(root)
+        val accountComponent = AccountComponent()
         accountComponent.initializeOrUpdate()
 
-        Timer().scheduleAtFixedRate(GuardUpdateCode(root), 1000, 1000)
+        Timer().scheduleAtFixedRate(GuardUpdateCode(), 1000, 1000)
 
         super.start(primaryStage)
     }

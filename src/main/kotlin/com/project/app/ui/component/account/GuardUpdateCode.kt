@@ -9,13 +9,12 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import java.util.TimerTask
+import com.project.app.ui.controller.BaseController.Companion.root
 
 private const val TEXT = "Обновление Steam кодов через %02d сек."
 private const val TIME_LIVE_GUARD = 25
 
-class GuardUpdateCode(
-    private val root: Pane
-): TimerTask() {
+class GuardUpdateCode: TimerTask() {
 
     private val pane = Pane().also {
         it.id = "guardComponent"

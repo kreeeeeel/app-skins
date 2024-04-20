@@ -8,6 +8,7 @@ import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
+import com.project.app.ui.controller.BaseController.Companion.root
 
 class DropAccountComponent: BaseComponent() {
 
@@ -38,11 +39,11 @@ class DropAccountComponent: BaseComponent() {
 
     }
 
-    override fun init(root: Pane) = Platform.runLater {
+    override fun init() = Platform.runLater {
         cancel.setOnMouseClicked { root.children.remove(pane) }
         block.children.addAll(drop, cancel)
         pane.children.addAll(block)
-        super.init(root)
+        super.init()
     }
 
     fun setProfile(profileModel: ProfileModel) = Platform.runLater{
@@ -56,10 +57,8 @@ class DropAccountComponent: BaseComponent() {
     }
 
     private fun dropAccount(profileModel: ProfileModel) {
-        val root = pane.parent as Pane
-
         val profileRepository = ProfileRepository()
-        val messageComponent = MessageComponent(root)
+        val messageComponent = MessageComponent()
 
         if (!profileRepository.remove(profileModel)) {
             messageComponent.drawErrorMessage("Не удалось удалить аккаунт..")
@@ -67,7 +66,7 @@ class DropAccountComponent: BaseComponent() {
         } else {
 
             root.children.remove(pane)
-            val accountComponent = AccountComponent(root)
+            val accountComponent = AccountComponent()
 
             messageComponent.drawSuccessMessage("Аккаунт был успешно удален!")
             accountComponent.initializeOrUpdate()

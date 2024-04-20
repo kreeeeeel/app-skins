@@ -1,5 +1,6 @@
 package com.project.app.ui.component.tray
 
+import com.project.app.ui.controller.BaseController.Companion.root
 import com.project.app.Desktop
 import com.project.app.TITLE
 import com.project.app.models.ConfigModel
@@ -76,7 +77,7 @@ class TrayComponent: BaseComponent() {
 
     private val configModel = ConfigModel().init()
 
-    override fun init(root: Pane) {
+    override fun init() {
 
         var isOpenedTray = false
 
@@ -92,18 +93,18 @@ class TrayComponent: BaseComponent() {
 
         if (!isOpenedTray) {
 
-            close.setOnMouseClicked { actionOnButton(root, true) }
-            collapse.setOnMouseClicked { actionOnButton(root, false) }
+            close.setOnMouseClicked { actionOnButton( true) }
+            collapse.setOnMouseClicked { actionOnButton(false) }
 
             if (configModel.isEnabledTray != null) inTrayOrClose(root.scene.window as Stage)
             else {
                 pane.children.add(block)
-                super.init(root)
+                super.init()
             }
         }
     }
 
-    private fun actionOnButton(root: Pane, isClose: Boolean) {
+    private fun actionOnButton(isClose: Boolean) {
         root.children.remove(pane)
 
         configModel.isEnabledTray = !isClose

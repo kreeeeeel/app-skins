@@ -50,9 +50,9 @@ class InvalidFileComponent(
         field.children.add(it)
     }
 
-    override fun init(root: Pane) {
+    override fun init() {
         CompletableFuture.supplyAsync { initScroll() }
-        super.init(root)
+        super.init()
     }
 
     private fun initScroll() {

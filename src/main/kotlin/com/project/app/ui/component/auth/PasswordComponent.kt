@@ -153,7 +153,7 @@ class PasswordComponent(
             b.layoutX = 536.0
             b.layoutY = 14.0
 
-            b.setOnMouseClicked { InvalidFileComponent(maFileData.invalid).init(pane.parent as Pane) }
+            b.setOnMouseClicked { InvalidFileComponent(maFileData.invalid).init() }
         }
 
         it.children.addAll(icon, text, button)
@@ -176,7 +176,7 @@ class PasswordComponent(
     private fun passwordFile(file: File) {
         val root = pane.parent as Pane
 
-        val loading = LoadingComponent(root)
+        val loading = LoadingComponent()
         loading.initialize()
 
         CompletableFuture.supplyAsync {
@@ -185,7 +185,7 @@ class PasswordComponent(
 
             Platform.runLater {
                 if (result.users.isEmpty()) {
-                    val message = MessageComponent(root)
+                    val message = MessageComponent()
                     message.drawErrorMessage("В этом файле небыло найдено паролей..")
 
                     loading.clear()
@@ -196,9 +196,9 @@ class PasswordComponent(
                     loading.clear()
 
                     val component = InvalidPasswordComponent(result)
-                    component.init(root)
+                    component.init()
 
-                } else SteamComponent(result.users.values.toList()).start(pane.parent as Pane)
+                } else SteamComponent(result.users.values.toList()).start()
             }
         }
 
@@ -206,9 +206,8 @@ class PasswordComponent(
 
     private fun keyboardPassword() {
 
-        val root = pane.parent as Pane
         val component = KeyboardPasswordComponent(maFileData.data)
-        component.init(root)
+        component.init()
 
     }
 

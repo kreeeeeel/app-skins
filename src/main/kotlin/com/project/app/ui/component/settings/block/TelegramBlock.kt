@@ -3,27 +3,37 @@ package com.project.app.ui.component.settings.block
 import com.project.app.models.ConfigModel
 import com.project.app.models.Telegram
 import com.project.app.models.TelegramBot
+import com.project.app.service.logger.Logger
+import com.project.app.service.logger.impl.DefaultLogger
 import com.project.app.service.telegram.BotInitialize
 import com.project.app.ui.component.message.CenterComponent
 import com.project.app.ui.component.message.LoadingComponent
 import com.project.app.ui.component.message.MessageComponent
 import com.project.app.ui.component.settings.SettingBlock
 import com.project.app.ui.component.settings.SettingsComponent
+import com.project.app.ui.controller.BaseController.Companion.getFooterRight
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.layout.Pane
+import javafx.scene.paint.ImagePattern
+import javafx.scene.shape.Circle
+import java.awt.Desktop
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.net.URI
 import java.util.concurrent.CompletableFuture
 import kotlin.random.Random
 
 class TelegramBlock(
     config: ConfigModel
 ): SettingBlock("Телеграм", "telegram", config) {
+
+    private val logger: Logger = DefaultLogger()
 
     /* Используются когда бот не привязан и не подтвержден */
     private val token: TextField = TextField().also {
@@ -89,7 +99,7 @@ class TelegramBlock(
         it.setOnMouseClicked { _ ->
 
             val center = CenterComponent("Код подтверждения скопирован!")
-            center.show(root)
+            center.show()
 
             val stringSelection = StringSelection(it.text)
             val clipboard = Toolkit.getDefaultToolkit().systemClipboard
@@ -106,19 +116,117 @@ class TelegramBlock(
     private val confirmButton = Button("Подтвердить").also {
         it.layoutX = 30.0
         it.layoutY = 191.0
+
+        it.setOnMouseClicked { _ -> Desktop.getDesktop().browse(
+            URI.create("https://t.me/${config.telegram?.bot?.name}?start=${config.telegram?.bot?.code}"))
+        }
+    }
+
+    /* Используется для отображения подключенного бота */
+    private val photo = Circle().also {
+        it.layoutX = 54.0
+        it.layoutY = 81.0
+        it.radius = 32.0
+
+        config.telegram?.user?.photo?.let { c ->
+            it.fill = ImagePattern(Image(c))
+        }
+    }
+
+    private val name = Label().also {
+        it.id = "telegramName"
+        it.layoutX = 97.0
+        it.layoutY = 60.0
+        it.text = "Не определенно"
+
+        config.telegram?.user?.name?.let { c ->
+            it.text = c
+        }
+    }
+
+    private val username = Label().also {
+        it.id = "telegramUserName"
+        it.layoutX = 97.0
+        it.layoutY = 81.0
+        it.text = "404"
+
+        config.telegram?.user?.username?.let { c ->
+            it.text = "@$c"
+        }
+    }
+
+    private val notifyIcon = ImageView().also {
+        it.id = "green"
+        it.layoutX = 26.0
+        it.layoutY = 125.0
+        it.fitHeight = 16.0
+        it.fitWidth = 16.0
+
+        config.telegram?.isNotify?.let { enabled ->
+            it.id = if (enabled) "green" else "red"
+        }
+    }
+
+    private val notifyText = Label("Не определенно").also {
+        it.id = "telegramNotification"
+        it.layoutX = 54.0
+        it.layoutY = 124.0
+
+        config.telegram?.isNotify?.let { enabled ->
+            it.text = if (enabled) "Уведомления включены" else "Уведомления отключены"
+        }
+    }
+
+    private val notifyBtn = Pane().also {
+        it.id = "telegramNotifyOff"
+        it.layoutX = 18.0
+        it.layoutY = 150.0
+
+        val icon = ImageView().also { img ->
+            img.id = "notify"
+            img.layoutX = 14.0
+            img.layoutY = 8.0
+            img.fitHeight = 24.0
+            img.fitWidth = 24.0
+        }
+
+        val text = Label().also { l ->
+            l.id = "telegramBtnText"
+            l.layoutX = 47.0
+            l.layoutY = 10.0
+
+            config.telegram?.isNotify?.let { enabled ->
+                l.text = if (enabled) "Отключить уведомления" else "Включить уведомления"
+            }
+        }
+
+        config.telegram?.isNotify?.let { enabled ->
+            it.id = if (enabled) "telegramNotifyOff" else "telegramNotifyOn"
+        }
+
+        it.setOnMouseClicked { actionNotify() }
+        it.children.addAll(icon, text)
     }
 
 
-    override fun init(root: Pane): Double {
+    private val logout = getFooterRight("logout").also {
+        it.layoutX = 235.0
+        it.layoutY = 15.0
 
-        this.root = root
+        it.setOnMouseClicked { logout() }
+    }
 
-        if (config.telegram == null || config.telegram?.bot == null){
-            block.children.addAll(token, botName, tokenText, tokenButton)
-            block.prefHeight = 290.0
-        } else if (config.telegram?.isWaiting!!) {
+    override fun init(): Double {
+
+        if (config.telegram?.isConnected == true) {
+            block.children.addAll(photo, name, username, notifyIcon, notifyText, notifyBtn, logout)
+            block.prefHeight = 210.0
+        } else if(config.telegram?.isWaiting == true) {
             block.children.addAll(confirmText, confirmIcon, confirmCode, confirmCodeText, confirmButton)
             block.prefHeight = 250.0
+        } else {
+            block.children.addAll(token, botName, tokenText, tokenButton)
+            block.prefHeight = 290.0
         }
 
         return block.prefHeight
@@ -139,19 +247,26 @@ class TelegramBlock(
 
     }
 
+    private fun logout() {
+        config.telegram = null
+        config.save()
+
+        SettingsComponent().refresh()
+    }
+
     private fun startBot(token: String, botName: String){
 
         if (!tokenButton.isDisable) {
 
             Platform.runLater {
-                val loadingComponent = LoadingComponent(root)
+                val loadingComponent = LoadingComponent()
                 loadingComponent.initialize()
 
                 val future = CompletableFuture.supplyAsync {
                     BotInitialize.init(token, botName)
 
                     if (BotInitialize.telegramBot == null || !BotInitialize.telegramBot?.isConnected!!) {
-                        val component = MessageComponent(root)
+                        val component = MessageComponent()
                         component.drawErrorMessage("Не удалось запустить телеграм бота, проверьте валидность данных")
                     } else {
 
@@ -163,11 +278,7 @@ class TelegramBlock(
                         config.telegram?.isWaiting = true
 
                         config.save()
-                        SettingsComponent().also {
-                            it.root = root
-                            it.refresh()
-                        }
-
+                        SettingsComponent().also { it.refresh() }
                     }
                 }
                 future.thenApply { Platform.runLater { loadingComponent.clear() } }
@@ -175,6 +286,27 @@ class TelegramBlock(
 
         }
 
+    }
+
+    private fun actionNotify() {
+        Platform.runLater {
+
+            val isEnabled = config.telegram?.isNotify == true
+
+            notifyText.text = if (isEnabled) "Уведомления отключены" else "Уведомления включены"
+            notifyBtn.id = if (isEnabled) "telegramNotifyOn" else "telegramNotifyOff"
+            notifyBtn.setOnMouseClicked { actionNotify() }
+
+            val label = notifyBtn.children.first { it.id == "telegramBtnText" } as Label
+            label.text = if (isEnabled) "Включить уведомления" else "Отключить уведомления"
+
+            notifyIcon.id = if (isEnabled) "red" else "green"
+
+            logger.info("Изменение статуса получения сообщений в телеграмме на: ${!isEnabled}")
+
+            config.telegram?.isNotify = !isEnabled
+            config.save()
+        }
     }
 
     private fun generateCode(): String {

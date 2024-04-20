@@ -823,3 +823,70 @@
     -fx-font-size: 14px;
     -fx-text-fill: #838383;
 }
+
+#telegramName {
+    -fx-font-size: 21px;
+    -fx-text-fill: #cdcdcd;
+}
+
+#telegramUserName {
+    -fx-font-size: 17px;
+    -fx-text-fill: #757575;
+}
+
+#telegramNotification {
+    -fx-font-size: 17px;
+    -fx-text-fill: #757575;
+}
+
+#telegramNotification {
+    -fx-font-size: 14px;
+    -fx-text-fill: #838383;
+}
+
+#telegramBtnText {
+    -fx-font-size: 17px;
+    -fx-text-fill: white;
+}
+
+#notify {
+    -fx-image: url("files/notify.png");
+}
+
+#telegramNotifyOff {
+    -fx-pref-width: 245px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: darkred;
+}
+
+#telegramNotifyOff:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #4a0000;
+}
+
+#telegramNotifyOn {
+    -fx-pref-width: 245px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: darkgreen;
+}
+
+#telegramNotifyOn:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #003700;
+}
+
+#telegramReset {
+    -fx-font-size: 14px;
+    -fx-text-fill: #838383;
+}
+
+#telegramReset:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #454545;
+}
+
+#logout {
+    -fx-image: url("files/logout.png");
+}

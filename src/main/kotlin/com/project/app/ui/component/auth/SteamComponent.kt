@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import com.project.app.ui.controller.BaseController.Companion.root
 
 private const val WAIT = "Пожалуйста, подождите, пока приложение авторизуется"
 private const val ATTEMPT = "Попытка входа %d из %d"
@@ -86,7 +87,7 @@ class SteamComponent(
 
     private val timer = Timer()
 
-    fun start(root: Pane) {
+    fun start() {
 
         root.children.let {
             it.removeIf { node -> node.id == "background" }
@@ -132,8 +133,7 @@ class SteamComponent(
 
     private fun finalizeAuth(users: List<String>) {
 
-        val root = pane.parent as Pane
-        val component = MessageComponent(root)
+        val component = MessageComponent()
         Platform.runLater {
 
             timer.cancel()
@@ -145,10 +145,10 @@ class SteamComponent(
                 component.drawErrorMessage("Не удалось войти во все аккаунты!!")
             } else {
                 val invalidAuthComponent = InvalidAuthComponent(validData.size, validData.size - users.size, users)
-                invalidAuthComponent.init(root)
+                invalidAuthComponent.init()
             }
 
-            val accounts = AccountComponent(root)
+            val accounts = AccountComponent()
             accounts.initializeOrUpdate()
         }
 

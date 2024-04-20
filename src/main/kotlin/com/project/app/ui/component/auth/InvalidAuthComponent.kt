@@ -68,9 +68,9 @@ class InvalidAuthComponent(
         field.children.add(it)
     }
 
-    override fun init(root: Pane) {
+    override fun init() {
         initScroll()
-        super.init(root)
+        super.init()
     }
 
     private fun initScroll() {

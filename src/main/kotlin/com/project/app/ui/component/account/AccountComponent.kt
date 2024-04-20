@@ -4,6 +4,7 @@ import com.project.app.models.ProfileModel
 import com.project.app.repository.ProfileRepository
 import com.project.app.service.driver.impl.DefaultDriver
 import com.project.app.ui.component.message.CenterComponent
+import com.project.app.ui.controller.BaseController.Companion.root
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
 import javafx.scene.Cursor
@@ -19,9 +20,7 @@ import kotlin.math.max
 
 private const val DEFAULT_HEIGHT = 536.0
 
-class AccountComponent(
-    private val root: Pane
-) {
+class AccountComponent {
     private var scroll: ScrollPane? = null
 
     fun initializeOrUpdate() {
@@ -113,7 +112,7 @@ class AccountComponent(
         browser.setOnMouseClicked {
 
             val center = CenterComponent("Браузер открывается!")
-            center.show(root)
+            center.show()
 
             val name = profileModel.cookie.keys.elementAt(0)
             val value = profileModel.cookie.values.elementAt(0)
@@ -126,7 +125,7 @@ class AccountComponent(
         copy.setOnMouseClicked { _ ->
 
             val center = CenterComponent("Логин и пароль скопированы!")
-            center.show(root)
+            center.show()
 
             val stringSelection = StringSelection(String.format("%s:%s", profileModel.username, profileModel.password))
             val clipboard = Toolkit.getDefaultToolkit().systemClipboard
@@ -138,7 +137,7 @@ class AccountComponent(
         guard.setOnMouseClicked { _ ->
 
             val center = CenterComponent("Код Steam Guard скопирован!")
-            center.show(root)
+            center.show()
 
             val label = profilePane.children.last { it.id == "account-first" } as Label
 
@@ -152,7 +151,7 @@ class AccountComponent(
         bag.setOnMouseClicked {
             val dropAccountComponent = DropAccountComponent()
             dropAccountComponent.setProfile(profileModel)
-            dropAccountComponent.init(root)
+            dropAccountComponent.init()
             dropAccountComponent.animate()
         }
 

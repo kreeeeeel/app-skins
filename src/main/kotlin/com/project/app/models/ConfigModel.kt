@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets
 private const val FILE_CONFIG = "config.json"
 
 data class Telegram(
+    var isNotify: Boolean = true,
     var isConnected: Boolean = false,
     var isWaiting: Boolean = false,
     var bot: TelegramBot? = null,
@@ -28,7 +29,7 @@ data class TelegramUser(
     var name: String? = null,
     var username: String? = null,
     var photo: String? = null,
-    var chatId: String? = null,
+    var chatId: Long? = null,
 )
 
 data class ConfigModel(

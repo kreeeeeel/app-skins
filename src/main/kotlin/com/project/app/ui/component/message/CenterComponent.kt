@@ -1,5 +1,7 @@
 package com.project.app.ui.component.message
 
+import com.project.app.ui.controller.BaseController.Companion.root
+
 import javafx.animation.FadeTransition
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
@@ -23,7 +25,7 @@ class CenterComponent(
         }
     }
 
-    fun show(root: Pane) {
+    fun show() {
         root.children.add(pane)
         FadeTransition(Duration(1350.0), pane).also {
 

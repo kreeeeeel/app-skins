@@ -8,6 +8,8 @@ import javafx.application.Platform
 import javafx.scene.layout.Pane
 import javafx.util.Duration
 
+import com.project.app.ui.controller.BaseController.Companion.root
+
 open class BaseComponent {
 
     val pane = Pane().also {
@@ -23,7 +25,7 @@ open class BaseComponent {
         pane.children.add(it)
     }
 
-    open fun init(root: Pane) = Platform.runLater {
+    open fun init() = Platform.runLater {
         root.children.add(pane)
         close.setOnMouseClicked { root.children.remove(pane) }
     }
