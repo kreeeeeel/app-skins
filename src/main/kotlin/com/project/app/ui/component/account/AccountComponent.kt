@@ -244,7 +244,7 @@ class AccountComponent {
 
                 val image = ImageView().also {
                     it.id = "badsearch"
-                    it.layoutX = 570.0
+                    it.layoutX = 550.0
                     it.layoutY = 150.0
                     it.fitWidth = 100.0
                     it.fitHeight = 100.0
@@ -252,7 +252,7 @@ class AccountComponent {
 
                 val title = Label("Поиск не показал результатов..").also {
                     it.id = "404-title"
-                    it.layoutX = 490.0
+                    it.layoutX = 460.0
                     it.layoutY = 275.0
                 }
                 content.children.addAll(image, title)

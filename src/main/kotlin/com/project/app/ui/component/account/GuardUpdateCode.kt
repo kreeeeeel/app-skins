@@ -48,8 +48,9 @@ class GuardUpdateCode: TimerTask() {
 
     override fun run() {
 
+        seconds--
         Platform.runLater { update.text = String.format(TEXT, seconds) }
-        if (seconds-- <= 1) {
+        if (seconds <= 0) {
 
             Platform.runLater {
                 havingAccounts.forEach { update(it) }

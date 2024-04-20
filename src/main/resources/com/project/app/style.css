@@ -914,6 +914,7 @@
 }
 
 #searchTextField {
+    -fx-prompt-text-fill: #d8d8d8;
     -fx-text-fill: white;
     -fx-alignment: center-left;
     -fx-background-color: transparent;
@@ -927,4 +928,52 @@
 
 #badsearch{
     -fx-image: url("files/badsearch.png");
+}
+
+#trayHint {
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-pref-width: 238px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #727171;
+}
+
+#trayValue {
+    -fx-font-size: 21px;
+    -fx-text-fill: #c9c9c9;
+}
+
+#trayValueText {
+    -fx-font-size: 14px;
+    -fx-text-fill: #727171;
+}
+
+#btnInTray {
+    -fx-background-color: darkgreen;
+}
+
+#btnInTray:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #003900;
+}
+
+#btnCloseApp {
+    -fx-background-color: darkred;
+}
+
+#btnCloseApp:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #4e0101;
+}
+
+#alwaysQuestion {
+    -fx-font-size: 14px;
+    -fx-text-fill: #727171;
+}
+
+#alwaysQuestion:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
+    -fx-text-fill: #434343;
 }

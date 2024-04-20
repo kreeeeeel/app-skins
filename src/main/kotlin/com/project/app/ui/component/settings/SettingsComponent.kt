@@ -3,6 +3,7 @@ package com.project.app.ui.component.settings
 import com.project.app.models.ConfigModel
 import com.project.app.ui.component.BaseComponent
 import com.project.app.ui.component.settings.block.TelegramBlock
+import com.project.app.ui.component.settings.block.TrayBlock
 import com.project.app.ui.controller.BaseController.Companion.root
 import javafx.application.Platform
 import javafx.scene.control.ScrollPane
@@ -36,6 +37,7 @@ class SettingsComponent: BaseComponent() {
 
     private val blocks: List<SettingBlock> = listOf(
         TelegramBlock(config),
+        TrayBlock(config)
     )
 
     fun refresh() {
@@ -64,7 +66,7 @@ class SettingsComponent: BaseComponent() {
             content.children.add(it.block)
 
             it.block.layoutY = lastPosY
-            lastPosY += it.init()
+            lastPosY += it.init() + 14.0
         }
 
         content.prefHeight = lastPosY
