@@ -139,7 +139,7 @@ class FileComponent: BaseComponent() {
 
             Platform.runLater {
                 if (import.data.isEmpty()) {
-                    notifyComponent.failure("Не было найдено .maFile, проверьте файлы которые указываете...")
+                    notifyComponent.failure("Не было найдено .maFile, проверьте файлы которые отправляете, и попробуйте снова!")
                 } else {
                     root.children.remove(pane)
                     PasswordComponent(import).init()

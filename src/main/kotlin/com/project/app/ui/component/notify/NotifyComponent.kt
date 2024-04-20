@@ -7,6 +7,8 @@ import javafx.application.Platform
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
+import javafx.scene.text.Font
+import javafx.scene.text.Text
 import javafx.util.Duration
 
 class NotifyComponent {
@@ -47,6 +49,14 @@ class NotifyComponent {
 
         Platform.runLater {
             root.children.add(pane)
+            val text = Text(value).also {
+                it.wrappingWidth = 476.0
+                it.font = Font.font("Franklin Gothic Medium", 14.0)
+            }
+
+            pane.prefHeight = if (text.layoutBounds.height >= 30) 70.0 else 50.0
+            icon.layoutY = if (text.layoutBounds.height >= 30) 17.0 else 7.0
+
             pane.id = if (isSuccess) "notifySuccess" else "notifyFailure"
             icon.id = if (isSuccess) "success" else "error"
 
@@ -55,7 +65,7 @@ class NotifyComponent {
 
             val firstAnim = TranslateTransition(Duration.millis(430.0), pane)
             firstAnim.fromY = -200.0
-            firstAnim.toY = 35.0
+            firstAnim.toY = 30.0
             firstAnim.cycleCount = 1
             firstAnim.isAutoReverse = true
 

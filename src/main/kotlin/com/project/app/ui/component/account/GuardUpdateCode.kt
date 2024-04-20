@@ -2,23 +2,22 @@ package com.project.app.ui.component.account
 
 import com.project.app.service.steam.SteamGuard
 import com.project.app.service.steam.impl.DefaultSteamGuard
+import com.project.app.ui.component.account.AccountComponent.Companion.havingAccounts
 import javafx.application.Platform
 import javafx.scene.control.Label
-import javafx.scene.control.ScrollPane
 import javafx.scene.image.ImageView
-import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import java.util.TimerTask
 import com.project.app.ui.controller.BaseController.Companion.root
 
-private const val TEXT = "Обновление Steam кодов через %02d сек."
+private const val TEXT = "Обновление Guard: %02d сек."
 private const val TIME_LIVE_GUARD = 30
 
 class GuardUpdateCode: TimerTask() {
 
     private val pane = Pane().also {
         it.id = "guardComponent"
-        it.layoutX = 27.0
+        it.layoutX = 335.0
         it.layoutY = 86.0
 
         val img = ImageView().also { img ->
@@ -32,9 +31,9 @@ class GuardUpdateCode: TimerTask() {
         it.children.add(img)
     }
 
-    private val update = Label("Инициализация таймера обновления").also {
+    private val update = Label("Инициализация").also {
         it.id = "guardLabel"
-        it.layoutX = 49.0
+        it.layoutX = 41.0
         it.layoutY = 9.0
 
         pane.children.add(it)
@@ -53,12 +52,7 @@ class GuardUpdateCode: TimerTask() {
         if (seconds-- <= 1) {
 
             Platform.runLater {
-                val scroll = root.children.first { it.id == "scroll-accounts" } as ScrollPane
-                val content = scroll.content as AnchorPane
-
-                content.children
-                    .filter { it.id == "account" }
-                    .forEach { update(it as Pane) }
+                havingAccounts.forEach { update(it) }
 
                 val drop = root.children.firstOrNull { it.id == "background" }
                 if (drop != null) {

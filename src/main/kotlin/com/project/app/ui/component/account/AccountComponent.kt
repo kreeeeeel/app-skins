@@ -10,6 +10,7 @@ import javafx.application.Platform
 import javafx.scene.Cursor
 import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
+import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
@@ -21,9 +22,54 @@ import kotlin.math.max
 private const val DEFAULT_HEIGHT = 536.0
 
 class AccountComponent {
+
+    init {
+
+        val search = Pane().also {
+            it.id = "searchPane"
+            it.layoutX = 27.0
+            it.layoutY = 86.0
+
+            val icon = ImageView().also { img ->
+                img.id = "search"
+                img.layoutX = 14.0
+                img.layoutY = 6.0
+                img.fitWidth = 24.0
+                img.fitHeight = 24.0
+            }
+
+            val textField = TextField().also { tf ->
+                tf.id = "searchTextField"
+                tf.layoutX = 38.0
+                tf.layoutY = 2.0
+                tf.promptText = "Поиск аккаунта по логину"
+
+                tf.textProperty().addListener { _, _, newValue -> search(newValue.lowercase())}
+                tf.focusedProperty().addListener { _, _, newValue -> searchResult.isVisible = newValue }
+            }
+
+            it.children.addAll(icon, textField)
+        }
+
+        root.children.add(search)
+
+    }
+
     private var scroll: ScrollPane? = null
 
+    private val searchResult = Label().also {
+        it.id = "searchResult"
+        it.layoutX = 33.0
+        it.layoutY = 127.0
+        it.isVisible = false
+
+        root.children.add(it)
+    }
+
+    companion object { lateinit var havingAccounts: List<Pane> }
+
     fun initializeOrUpdate() {
+
         scroll = root.children.firstOrNull{ it.id == "scroll-accounts" } as? ScrollPane
             ?: getScrollPane().also { root.children.add(it) }
 
@@ -85,6 +131,7 @@ class AccountComponent {
             return@map pane
         }
 
+        havingAccounts = panes
         content.children.addAll(panes)
         content.prefHeight = max(DEFAULT_HEIGHT, 134.0 * counterVertical)
     }
@@ -160,6 +207,62 @@ class AccountComponent {
 
         profilePane.setOnMouseEntered { profilePane.children.add(pane) }
         profilePane.setOnMouseExited { profilePane.children.removeIf { it.id == "mouse-entered-account" } }
+    }
+
+    private fun search(login: String) {
+
+        Platform.runLater {
+
+            scroll = root.children.firstOrNull{ it.id == "scroll-accounts" } as? ScrollPane
+                ?: getScrollPane().also { root.children.add(it) }
+
+            val content = scroll?.content as AnchorPane
+            content.children.clear()
+
+            var counterVertical = 0
+            var counterHorizontal = 0
+
+            val find = havingAccounts.filter {
+                val pane = it
+                val label = pane.children.first { l -> l.id == "account-first" } as Label
+
+                label.text.startsWith(login)
+            }.map {
+                it.layoutX = 26.0 + (286.0 * counterVertical++)
+                it.layoutY = 14.0 + (126.0 * counterHorizontal)
+
+                if (counterVertical >= 4) {
+                    counterVertical = 0
+                    counterHorizontal++
+                }
+
+                return@map it
+            }
+
+            searchResult.text = "Найдено результатов: ${find.size}"
+            if (find.isEmpty()) {
+
+                val image = ImageView().also {
+                    it.id = "badsearch"
+                    it.layoutX = 570.0
+                    it.layoutY = 150.0
+                    it.fitWidth = 100.0
+                    it.fitHeight = 100.0
+                }
+
+                val title = Label("Поиск не показал результатов..").also {
+                    it.id = "404-title"
+                    it.layoutX = 490.0
+                    it.layoutY = 275.0
+                }
+                content.children.addAll(image, title)
+                //searchResult.isVisible = find.size != havingAccounts.size
+
+            } else content.children.addAll(find)
+
+            content.prefHeight = max(DEFAULT_HEIGHT, 134.0 * counterVertical)
+        }
+
     }
 
     private fun getScrollPane() = ScrollPane().also {
