@@ -2,6 +2,7 @@ package com.project.app.ui.component.settings
 
 import com.project.app.models.ConfigModel
 import com.project.app.ui.component.BaseComponent
+import com.project.app.ui.component.settings.block.BrowserBlock
 import com.project.app.ui.component.settings.block.TelegramBlock
 import com.project.app.ui.component.settings.block.TrayBlock
 import com.project.app.ui.controller.BaseController.Companion.root
@@ -37,6 +38,7 @@ class SettingsComponent: BaseComponent() {
 
     private val blocks: List<SettingBlock> = listOf(
         TelegramBlock(config),
+        BrowserBlock(config),
         TrayBlock(config)
     )
 

@@ -977,3 +977,33 @@
     -fx-underline: true;
     -fx-text-fill: #434343;
 }
+
+#browserHint {
+    -fx-font-size: 14px;
+    -fx-text-fill: #727171;
+    -fx-pref-width: 238px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+#browserPane {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 40px;
+    -fx-background-color: black;
+    -fx-background-radius: 8px;
+}
+#browserPane:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #3c3c3c;
+}
+
+#browser {-fx-image: url("files/browser.png");}
+#edge {-fx-image: url("files/edge.png");}
+#google {-fx-image: url("files/google.png"); }
+#firefox {-fx-image: url("files/firefox.png"); }
+
+#browserText {
+    -fx-font-size: 17px;
+    -fx-text-fill: #e1e1e1;
+}

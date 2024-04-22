@@ -125,7 +125,7 @@ class DefaultSteamAuthClient: SteamAuthClient {
             return null
         }
 
-        return URLDecoder.decode(cookie.substring(0, index), StandardCharsets.UTF_8)
+        return URLDecoder.decode(cookie.substring(0, index), StandardCharsets.UTF_8.toString())
     }
 
     private fun getRandomHexString(): String {

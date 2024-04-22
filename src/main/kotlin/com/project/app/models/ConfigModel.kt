@@ -7,7 +7,6 @@ import com.project.app.service.logger.impl.DefaultLogger
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import java.nio.charset.StandardCharsets
 
 private const val FILE_CONFIG = "config.json"
 
@@ -63,7 +62,7 @@ data class ConfigModel(
     }
 
     fun save() {
-        FileWriter(FILE_CONFIG, StandardCharsets.UTF_8).use {
+        FileWriter(FILE_CONFIG).use {
             it.write(gson.toJson(this))
             it.flush()
         }

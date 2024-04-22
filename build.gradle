@@ -28,7 +28,7 @@ application {
   mainClass = 'com.project.app.DesktopKt'
 }
 kotlin {
-  jvmToolchain(11)
+  jvmToolchain(8)
 }
 
 tasks.register('customFatJar', Jar) {
@@ -37,9 +37,18 @@ tasks.register('customFatJar', Jar) {
   }
   archiveBaseName = 'app-jar'
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+  from {
+    configurations.runtimeClasspath.collect {
+      it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+      }
+    }
+  }
   with jar
 }
+
 
 javafx {
   version = '11'

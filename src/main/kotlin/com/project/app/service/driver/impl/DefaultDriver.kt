@@ -16,7 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
 
 class DefaultDriver: Driver {
 
-    private val config = ConfigModel()
+    private val config = ConfigModel().init()
     private val logger: Logger = DefaultLogger()
 
     private val webDriverManager = when(config.browserType) {

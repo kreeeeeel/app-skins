@@ -7,6 +7,5 @@ data class ProfileModel(
     var name: String,
     var photo: String,
     var password: String,
-    var cookie: Map<String, String>,
     var inventory: BigDecimal = BigDecimal.ZERO
 )

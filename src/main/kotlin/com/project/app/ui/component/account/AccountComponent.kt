@@ -1,9 +1,13 @@
 package com.project.app.ui.component.account
 
 import com.project.app.models.ProfileModel
+import com.project.app.models.SteamModel
+import com.project.app.repository.MaFileRepository
 import com.project.app.repository.ProfileRepository
 import com.project.app.service.driver.impl.DefaultDriver
 import com.project.app.ui.component.message.CenterComponent
+import com.project.app.ui.component.message.LoadingComponent
+import com.project.app.ui.component.notify.NotifyComponent
 import com.project.app.ui.controller.BaseController.Companion.root
 import com.project.app.ui.controller.WIDTH
 import javafx.application.Platform
@@ -66,7 +70,7 @@ class AccountComponent {
         root.children.add(it)
     }
 
-    companion object { lateinit var havingAccounts: List<Pane> }
+    companion object { var havingAccounts: List<Pane> = emptyList() }
 
     fun initializeOrUpdate() {
 
@@ -158,13 +162,44 @@ class AccountComponent {
         browser.setOnMouseExited { _ -> text.text = default }
         browser.setOnMouseClicked {
 
-            val center = CenterComponent("Браузер открывается!")
-            center.show()
+            val load = LoadingComponent()
+            load.initialize()
 
-            val name = profileModel.cookie.keys.elementAt(0)
-            val value = profileModel.cookie.values.elementAt(0)
+            CompletableFuture.supplyAsync {
 
-            CompletableFuture.supplyAsync { DefaultDriver().openBrowseProfile(name, value) }
+                val maFileRepository = MaFileRepository()
+                val property = maFileRepository.find(profileModel.username)
+                val notifyComponent = NotifyComponent()
+
+                if (property == null) {
+                    Platform.runLater {
+                        notifyComponent.failure("Не удалось авторизоваться в аккаунт Steam")
+                        load.clear()
+                    }
+                    return@supplyAsync
+                }
+
+                val steamModel = SteamModel(profileModel.username, profileModel.password, property.sharedSecret)
+                if (!steamModel.loggedIn()) {
+                    Platform.runLater {
+                        notifyComponent.failure("Произошла ошибка при авторизации в аккаунт Steam")
+                        load.clear()
+                    }
+                } else {
+
+                    val split = steamModel.steamCookie!!.split("=")
+                    val name = split[0]
+                    val value = split[1]
+
+                    val center = CenterComponent("Браузер открывается!")
+                    Platform.runLater {
+                        center.show()
+                        load.clear()
+                    }
+
+                    DefaultDriver().openBrowseProfile(name, value)
+                }
+            }
         }
 
         copy.setOnMouseEntered { _ -> text.text = "Нажмите, чтобы скопировать логин:пароль" }
