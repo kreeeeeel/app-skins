@@ -1,5 +1,6 @@
 package com.project.app.ui.component.auth
 
+import com.project.app.client.interceptor.ClientInterceptor
 import com.project.app.models.SteamModel
 import com.project.app.data.ValidData
 import com.project.app.models.ConfigModel
@@ -74,6 +75,14 @@ class SteamComponent(
         pane.children.add(it)
     }
 
+    private val count = Label().also {
+        it.id = "countAuthSteam"
+        it.layoutX = 450.0
+        it.layoutY = 150.0
+
+        pane.children.add(it)
+    }
+
     private val wait = Label(WAIT).also {
         it.id = "waitAuthSteam"
         it.layoutX = 349.0
@@ -95,18 +104,31 @@ class SteamComponent(
         }
         timer.scheduleAtFixedRate(SteamTask(wait), 500, 500)
 
+        val exist = ClientInterceptor().fileAgents.exists()
+        if (!exist) {
+            Platform.runLater {
+                NotifyComponent().failure("Файл с user-agents для выполнения запросов не найден!")
+            }
+        }
+
         val invalid = mutableListOf<String>()
         CompletableFuture.supplyAsync{
-            for (data in validData) { if (!auth(data)) invalid.add(data.username) }
+
+            for (i in validData.indices) {
+                if (!auth(validData[i], i, validData.size))
+                    invalid.add(validData[i].username)
+            }
+
         }.thenRun { finalizeAuth(invalid) }
     }
 
-    private fun auth(data: ValidData): Boolean {
+    private fun auth(data: ValidData, currentCount: Int, size: Int): Boolean {
         val steamModel = SteamModel(data.username, data.password!!, data.sharedSecret)
         do {
             Platform.runLater {
                 attempt.text = String.format(ATTEMPT, currentAttempt, config.attemptRequest)
                 username.text = data.username
+                count.text = "Осталось аккаунтов: ${currentCount + 1} из $size"
             }
         } while (!steamModel.loggedIn() && currentAttempt++ < config.attemptRequest)
 

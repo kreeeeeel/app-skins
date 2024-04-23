@@ -559,6 +559,13 @@
     -fx-alignment: center;
 }
 
+#countAuthSteam {
+    -fx-font-size: 21px;
+    -fx-text-fill: #cccccc;
+    -fx-pref-width: 300px;
+    -fx-alignment: center;
+}
+
 #waitAuthSteam {
     -fx-font-size: 20px;
     -fx-text-fill: #eeeeee;

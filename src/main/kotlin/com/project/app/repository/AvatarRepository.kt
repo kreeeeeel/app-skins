@@ -3,10 +3,7 @@ package com.project.app.repository
 import com.project.app.service.logger.Logger
 import com.project.app.service.logger.impl.DefaultLogger
 import javafx.scene.image.Image
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 import java.net.URL
 
 private val PATH_TO_AVATARS = System.getProperty("user.dir") + "/avatars"
@@ -44,7 +41,7 @@ class AvatarRepository {
         val link = profile.photo
         val prefix = link.substring(link.lastIndexOf('.') + 1, link.length)
 
-        val bytes = getBytesFromUrl(link)
+        val bytes = getBytesFromUrl(link) ?: return null
         val inputStream = ByteArrayInputStream(bytes)
 
         val result = Image(inputStream)
@@ -57,16 +54,20 @@ class AvatarRepository {
         return result
     }
 
-    private fun getBytesFromUrl(url: String): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        URL(url).openStream().use { inputStream ->
-            val buffer = ByteArray(4096)
-            var bytesRead: Int
-            while ((inputStream.read(buffer).also { bytesRead = it }) != -1) {
-                outputStream.write(buffer, 0, bytesRead)
+    private fun getBytesFromUrl(url: String): ByteArray? {
+        try {
+            val outputStream = ByteArrayOutputStream()
+            URL(url).openStream().use { inputStream ->
+                val buffer = ByteArray(4096)
+                var bytesRead: Int
+                while ((inputStream.read(buffer).also { bytesRead = it }) != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
             }
+            return outputStream.toByteArray()
+        } catch (e: IOException) {
+            return null
         }
-        return outputStream.toByteArray()
     }
 
 }

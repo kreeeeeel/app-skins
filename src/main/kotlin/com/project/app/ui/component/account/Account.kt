@@ -1,11 +1,13 @@
 package com.project.app.ui.component.account
 
+import com.project.app.Desktop
 import com.project.app.models.ProfileModel
 import com.project.app.repository.AvatarRepository
 import com.project.app.repository.MaFileRepository
 import com.project.app.service.steam.SteamGuard
 import com.project.app.service.steam.impl.DefaultSteamGuard
 import javafx.scene.control.Label
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 
@@ -29,6 +31,8 @@ object Account {
         }
 
         val photo = avatarRepository.getAvatar(profileModel.username)
+            ?: Image(Desktop::class.java.getResourceAsStream("files/nophoto.jpg"))
+
         val avatar = ImageView(photo).also {
             it.layoutX = 30.0
             it.layoutY = 24.0

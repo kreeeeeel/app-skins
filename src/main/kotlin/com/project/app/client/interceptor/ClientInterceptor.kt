@@ -2,6 +2,7 @@ package com.project.app.client.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.io.File
 import java.io.FileReader
 import java.util.*
 
@@ -9,22 +10,27 @@ class ClientInterceptor(
     private val cookie: String? = null
 ): Interceptor {
 
-    private val userAgents = FileReader("user-agents.txt")
-        .use { it.readLines() }
+    val fileAgents = File("user-agents.txt")
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder().also {
-            it.addHeader("User-Agent", getRandomUserAgent())
 
-            if (cookie != null) {
-                it.addHeader("Cookie", cookie)
-            }
-        }.build()
+        if (fileAgents.exists()) {
+            val userAgents = FileReader(fileAgents).use { it.readLines() }
+            val request = chain.request().newBuilder().also {
+                it.addHeader("User-Agent", getRandomUserAgent(userAgents))
 
-        return chain.proceed(request)
+                if (cookie != null) {
+                    it.addHeader("Cookie", cookie)
+                }
+            }.build()
+
+            return chain.proceed(request)
+        }
+
+        return chain.proceed(chain.request())
     }
 
-    private fun getRandomUserAgent(): String {
+    private fun getRandomUserAgent(userAgents: List<String>): String {
         val randomIndex = Random().nextInt(userAgents.size)
         return userAgents[randomIndex]
     }
